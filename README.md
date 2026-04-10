@@ -12,7 +12,7 @@ cp .env.example .env   # then edit .env with your values
 npm start
 ```
 
-The server starts on `http://localhost:3000` by default.
+The server starts on `https://artemis.up.railway.app` by default.
 
 ## PostgreSQL Setup
 
@@ -79,7 +79,7 @@ x-api-key: <your_api_key>
 ### Register
 
 ```bash
-curl -X POST http://localhost:3000/register \
+curl -X POST https://artemis.up.railway.app/register \
   -H "Content-Type: application/json" \
   -d '{"name": "Ada Lovelace", "email": "ada@example.com"}'
 ```
@@ -87,7 +87,7 @@ curl -X POST http://localhost:3000/register \
 ### Create a Log
 
 ```bash
-curl -X POST http://localhost:3000/logs \
+curl -X POST https://artemis.up.railway.app/logs \
   -H "Content-Type: application/json" \
   -H "x-api-key: YOUR_API_KEY" \
   -d '{
@@ -101,14 +101,14 @@ curl -X POST http://localhost:3000/logs \
 ### Check Mission Progress
 
 ```bash
-curl http://localhost:3000/mission \
+curl https://artemis.up.railway.app/mission \
   -H "x-api-key: YOUR_API_KEY"
 ```
 
 ### Get a Mission Briefing
 
 ```bash
-curl -X POST http://localhost:3000/mission/brief \
+curl -X POST https://artemis.up.railway.app/mission/brief \
   -H "Content-Type: application/json" \
   -H "x-api-key: YOUR_API_KEY" \
   -d '{}'
@@ -117,7 +117,7 @@ curl -X POST http://localhost:3000/mission/brief \
 ### View the Leaderboard
 
 ```bash
-curl http://localhost:3000/leaderboard
+curl https://artemis.up.railway.app/leaderboard
 ```
 
 ## Environment Variables

@@ -12,7 +12,7 @@ servers:
     description: Configurable server
     variables:
       baseUrl:
-        default: "http://localhost:3000"
+        default: "https://artemis.up.railway.app"
         description: Base URL for the API
 
 security: []
