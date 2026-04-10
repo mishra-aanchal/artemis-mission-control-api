@@ -1,0 +1,743 @@
+openapi: 3.1.0
+info:
+  title: Artemis II Mission Control API
+  description: >
+    Mission Control API for the Artemis II lunar flyby mission.
+    Manage crew logs, mission briefings, and leaderboard data.
+  version: 1.0.0
+  contact:
+    name: Artemis II Mission Control
+servers:
+  - url: "{baseUrl}"
+    description: Configurable server
+    variables:
+      baseUrl:
+        default: "http://localhost:3000"
+        description: Base URL for the API
+
+security: []
+
+tags:
+  - name: Health
+    description: Health check
+  - name: Auth
+    description: Registration
+  - name: Mission
+    description: Mission information and briefings
+  - name: Logs
+    description: Mission log CRUD operations
+  - name: Leaderboard
+    description: Crew leaderboard
+  - name: Admin
+    description: Administrative operations
+
+paths:
+  /health:
+    get:
+      tags: [Health]
+      summary: Health check
+      description: Returns the health status of the API. No authentication required.
+      operationId: getHealth
+      responses:
+        "200":
+          description: API is healthy
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: ok
+                  timestamp:
+                    type: string
+                    format: date-time
+                    example: "2026-04-10T12:00:00.000Z"
+              example:
+                status: ok
+                timestamp: "2026-04-10T12:00:00.000Z"
+
+  /register:
+    post:
+      tags: [Auth]
+      summary: Register a new crew member
+      description: Registers a new user and returns their API key and callsign. No authentication required.
+      operationId: registerUser
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [name, email]
+              properties:
+                name:
+                  type: string
+                  example: "Neil Armstrong"
+                email:
+                  type: string
+                  format: email
+                  example: "neil@nasa.gov"
+            example:
+              name: "Neil Armstrong"
+              email: "neil@nasa.gov"
+      responses:
+        "201":
+          description: Registration successful
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RegisterResponse"
+              example:
+                message: "Registration successful"
+                callsign: "EAGLE-7"
+                api_key: "ak_abc123def456"
+                name: "Neil Armstrong"
+                email: "neil@nasa.gov"
+                sigil: "https://example.com/sigils/eagle-7.png"
+                mission_status: "active"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+
+  /mission:
+    get:
+      tags: [Mission]
+      summary: Get mission overview
+      description: Returns mission overview data. Supports JSON and HTML responses based on Accept header.
+      operationId: getMission
+      security:
+        - ApiKey: []
+      parameters:
+        - name: Accept
+          in: header
+          description: "Response format: application/json or text/html"
+          schema:
+            type: string
+            enum: [application/json, text/html]
+            example: application/json
+      responses:
+        "200":
+          description: Mission overview
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  mission:
+                    type: string
+                    example: "Artemis II"
+                  status:
+                    type: string
+                    example: "active"
+                  phase:
+                    type: string
+                    example: "transit"
+                  crew:
+                    type: array
+                    items:
+                      type: string
+                    example: ["wiseman", "glover", "koch", "hansen"]
+              example:
+                mission: "Artemis II"
+                status: "active"
+                phase: "transit"
+                crew: ["wiseman", "glover", "koch", "hansen"]
+            text/html:
+              schema:
+                type: string
+              example: "<html><body><h1>Artemis II Mission</h1></body></html>"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+
+  /logs:
+    post:
+      tags: [Logs]
+      summary: Create a mission log
+      description: Creates a new mission log entry.
+      operationId: createLog
+      security:
+        - ApiKey: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LogCreate"
+            example:
+              title: "Navigation system calibration complete"
+              description: "All navigation instruments calibrated and verified for lunar transit."
+              phase: "transit"
+              category: "navigation"
+              crew_member: "wiseman"
+              priority: "high"
+              status: "complete"
+      responses:
+        "201":
+          description: Log created successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LogResponse"
+              example:
+                id: 1
+                title: "Navigation system calibration complete"
+                description: "All navigation instruments calibrated and verified for lunar transit."
+                phase: "transit"
+                category: "navigation"
+                crew_member: "wiseman"
+                priority: "high"
+                status: "complete"
+                created_at: "2026-04-10T12:00:00.000Z"
+                updated_at: "2026-04-10T12:00:00.000Z"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+    get:
+      tags: [Logs]
+      summary: List mission logs
+      description: Returns a filtered and sorted list of mission logs.
+      operationId: listLogs
+      security:
+        - ApiKey: []
+      parameters:
+        - name: phase
+          in: query
+          schema:
+            $ref: "#/components/schemas/Phase"
+          example: "transit"
+        - name: category
+          in: query
+          schema:
+            $ref: "#/components/schemas/Category"
+          example: "navigation"
+        - name: crew_member
+          in: query
+          schema:
+            $ref: "#/components/schemas/CrewMember"
+          example: "wiseman"
+        - name: status
+          in: query
+          schema:
+            $ref: "#/components/schemas/Status"
+          example: "pending"
+        - name: priority
+          in: query
+          schema:
+            $ref: "#/components/schemas/Priority"
+          example: "high"
+        - name: sort
+          in: query
+          description: Sort order by creation date
+          schema:
+            type: string
+            enum: [asc, desc]
+            default: desc
+          example: "desc"
+      responses:
+        "200":
+          description: List of mission logs
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/LogResponse"
+              example:
+                - id: 1
+                  title: "Navigation system calibration complete"
+                  description: "All navigation instruments calibrated and verified for lunar transit."
+                  phase: "transit"
+                  category: "navigation"
+                  crew_member: "wiseman"
+                  priority: "high"
+                  status: "complete"
+                  created_at: "2026-04-10T12:00:00.000Z"
+                  updated_at: "2026-04-10T12:00:00.000Z"
+                - id: 2
+                  title: "CO2 scrubber maintenance"
+                  description: "Routine maintenance on life support CO2 scrubbers."
+                  phase: "transit"
+                  category: "life-support"
+                  crew_member: "koch"
+                  priority: "medium"
+                  status: "pending"
+                  created_at: "2026-04-10T11:30:00.000Z"
+                  updated_at: "2026-04-10T11:30:00.000Z"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+
+  /logs/{id}:
+    get:
+      tags: [Logs]
+      summary: Get a mission log by ID
+      description: Returns a single mission log entry.
+      operationId: getLog
+      security:
+        - ApiKey: []
+      parameters:
+        - $ref: "#/components/parameters/LogId"
+      responses:
+        "200":
+          description: Mission log details
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LogResponse"
+              example:
+                id: 1
+                title: "Navigation system calibration complete"
+                description: "All navigation instruments calibrated and verified for lunar transit."
+                phase: "transit"
+                category: "navigation"
+                crew_member: "wiseman"
+                priority: "high"
+                status: "complete"
+                created_at: "2026-04-10T12:00:00.000Z"
+                updated_at: "2026-04-10T12:00:00.000Z"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+    patch:
+      tags: [Logs]
+      summary: Update a mission log
+      description: Updates an existing mission log. At least one field must be provided.
+      operationId: updateLog
+      security:
+        - ApiKey: []
+      parameters:
+        - $ref: "#/components/parameters/LogId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LogUpdate"
+            example:
+              status: "complete"
+              priority: "critical"
+      responses:
+        "200":
+          description: Log updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LogResponse"
+              example:
+                id: 1
+                title: "Navigation system calibration complete"
+                description: "All navigation instruments calibrated and verified for lunar transit."
+                phase: "transit"
+                category: "navigation"
+                crew_member: "wiseman"
+                priority: "critical"
+                status: "complete"
+                created_at: "2026-04-10T12:00:00.000Z"
+                updated_at: "2026-04-10T12:05:00.000Z"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+    delete:
+      tags: [Logs]
+      summary: Delete a mission log
+      description: Deletes a mission log entry by ID.
+      operationId: deleteLog
+      security:
+        - ApiKey: []
+      parameters:
+        - $ref: "#/components/parameters/LogId"
+      responses:
+        "200":
+          description: Log deleted successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Log deleted successfully"
+              example:
+                message: "Log deleted successfully"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+
+  /mission/brief:
+    post:
+      tags: [Mission]
+      summary: Generate a mission briefing
+      description: Generates an AI-powered mission briefing, optionally filtered by phase.
+      operationId: createMissionBrief
+      security:
+        - ApiKey: []
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                phase:
+                  $ref: "#/components/schemas/Phase"
+            example:
+              phase: "transit"
+      responses:
+        "200":
+          description: Mission briefing generated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  briefing:
+                    type: string
+                    example: "Transit phase briefing: All systems nominal. Navigation calibration complete. Life support operating within parameters."
+                  phase:
+                    type: string
+                    example: "transit"
+                  generated_at:
+                    type: string
+                    format: date-time
+                    example: "2026-04-10T12:00:00.000Z"
+              example:
+                briefing: "Transit phase briefing: All systems nominal. Navigation calibration complete. Life support operating within parameters."
+                phase: "transit"
+                generated_at: "2026-04-10T12:00:00.000Z"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+
+  /leaderboard:
+    get:
+      tags: [Leaderboard]
+      summary: Get the crew leaderboard
+      description: Returns the crew leaderboard rankings. Supports JSON and HTML responses. No authentication required.
+      operationId: getLeaderboard
+      parameters:
+        - name: Accept
+          in: header
+          description: "Response format: application/json or text/html"
+          schema:
+            type: string
+            enum: [application/json, text/html]
+            example: application/json
+      responses:
+        "200":
+          description: Leaderboard data
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    callsign:
+                      type: string
+                      example: "EAGLE-7"
+                    name:
+                      type: string
+                      example: "Neil Armstrong"
+                    log_count:
+                      type: integer
+                      example: 42
+                    rank:
+                      type: integer
+                      example: 1
+              example:
+                - callsign: "EAGLE-7"
+                  name: "Neil Armstrong"
+                  log_count: 42
+                  rank: 1
+                - callsign: "FALCON-3"
+                  name: "Buzz Aldrin"
+                  log_count: 37
+                  rank: 2
+            text/html:
+              schema:
+                type: string
+              example: "<html><body><h1>Leaderboard</h1></body></html>"
+
+  /mission/debrief:
+    get:
+      tags: [Mission]
+      summary: Get mission debrief page
+      description: Returns an HTML mission debrief page. API key is passed as a query parameter.
+      operationId: getMissionDebrief
+      parameters:
+        - name: api_key
+          in: query
+          required: true
+          description: The user's API key
+          schema:
+            type: string
+          example: "ak_abc123def456"
+      responses:
+        "200":
+          description: Mission debrief HTML page
+          content:
+            text/html:
+              schema:
+                type: string
+              example: "<html><body><h1>Mission Debrief</h1><p>Artemis II mission summary...</p></body></html>"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+
+  /admin/reset:
+    post:
+      tags: [Admin]
+      summary: Reset application data
+      description: Resets all application data. Requires admin key authentication.
+      operationId: adminReset
+      security:
+        - AdminKey: []
+      responses:
+        "200":
+          description: Reset successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Reset successful"
+              example:
+                message: "Reset successful"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+
+components:
+  securitySchemes:
+    ApiKey:
+      type: apiKey
+      name: x-api-key
+      in: header
+      description: API key obtained from /register
+    AdminKey:
+      type: apiKey
+      name: x-admin-key
+      in: header
+      description: Admin key for privileged operations
+
+  parameters:
+    LogId:
+      name: id
+      in: path
+      required: true
+      description: The mission log ID
+      schema:
+        type: integer
+      example: 1
+
+  schemas:
+    Phase:
+      type: string
+      enum:
+        - pre-launch
+        - launch
+        - orbit
+        - transit
+        - lunar-approach
+        - flyby
+        - return
+        - reentry
+      example: "transit"
+
+    Category:
+      type: string
+      enum:
+        - navigation
+        - life-support
+        - communication
+        - science
+        - crew-status
+        - anomaly
+      example: "navigation"
+
+    CrewMember:
+      type: string
+      enum:
+        - wiseman
+        - glover
+        - koch
+        - hansen
+      example: "wiseman"
+
+    Priority:
+      type: string
+      enum:
+        - critical
+        - high
+        - medium
+        - low
+      default: medium
+      example: "medium"
+
+    Status:
+      type: string
+      enum:
+        - pending
+        - in-progress
+        - complete
+      default: pending
+      example: "pending"
+
+    RegisterResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          example: "Registration successful"
+        callsign:
+          type: string
+          example: "EAGLE-7"
+        api_key:
+          type: string
+          example: "ak_abc123def456"
+        name:
+          type: string
+          example: "Neil Armstrong"
+        email:
+          type: string
+          format: email
+          example: "neil@nasa.gov"
+        sigil:
+          type: string
+          example: "https://example.com/sigils/eagle-7.png"
+        mission_status:
+          type: string
+          example: "active"
+
+    LogCreate:
+      type: object
+      required:
+        - title
+        - phase
+        - category
+        - crew_member
+      properties:
+        title:
+          type: string
+          maxLength: 200
+          example: "Navigation system calibration complete"
+        description:
+          type: string
+          example: "All navigation instruments calibrated and verified for lunar transit."
+        phase:
+          $ref: "#/components/schemas/Phase"
+        category:
+          $ref: "#/components/schemas/Category"
+        crew_member:
+          $ref: "#/components/schemas/CrewMember"
+        priority:
+          $ref: "#/components/schemas/Priority"
+        status:
+          $ref: "#/components/schemas/Status"
+
+    LogUpdate:
+      type: object
+      minProperties: 1
+      properties:
+        title:
+          type: string
+          maxLength: 200
+          example: "Updated navigation calibration"
+        description:
+          type: string
+          example: "Updated description of calibration process."
+        phase:
+          $ref: "#/components/schemas/Phase"
+        category:
+          $ref: "#/components/schemas/Category"
+        crew_member:
+          $ref: "#/components/schemas/CrewMember"
+        priority:
+          $ref: "#/components/schemas/Priority"
+        status:
+          $ref: "#/components/schemas/Status"
+
+    LogResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        title:
+          type: string
+          example: "Navigation system calibration complete"
+        description:
+          type: string
+          example: "All navigation instruments calibrated and verified for lunar transit."
+        phase:
+          $ref: "#/components/schemas/Phase"
+        category:
+          $ref: "#/components/schemas/Category"
+        crew_member:
+          $ref: "#/components/schemas/CrewMember"
+        priority:
+          $ref: "#/components/schemas/Priority"
+        status:
+          $ref: "#/components/schemas/Status"
+        created_at:
+          type: string
+          format: date-time
+          example: "2026-04-10T12:00:00.000Z"
+        updated_at:
+          type: string
+          format: date-time
+          example: "2026-04-10T12:00:00.000Z"
+
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          example: "Something went wrong"
+        message:
+          type: string
+          example: "Detailed error description"
+
+  responses:
+    BadRequest:
+      description: Bad request - invalid or missing parameters
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+          example:
+            error: "Bad Request"
+            message: "Validation failed: title is required"
+    Unauthorized:
+      description: Unauthorized - missing or invalid API key
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+          example:
+            error: "Unauthorized"
+            message: "Missing or invalid API key"
+    Forbidden:
+      description: Forbidden - insufficient permissions
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+          example:
+            error: "Forbidden"
+            message: "You do not have permission to perform this action"
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+          example:
+            error: "Not Found"
+            message: "Log not found"
