@@ -1,0 +1,10 @@
+name: 'space.local'
+values:
+  - key: baseUrl
+    value: 'http://localhost:3000'
+    enabled: true
+    type: default
+  - key: apiKey
+    value: 'apiKey'
+    enabled: true
+    type: secret

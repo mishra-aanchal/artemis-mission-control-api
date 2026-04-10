@@ -1,0 +1,10 @@
+$kind: http-request
+method: GET
+url: '{{baseUrl}}/logs/:id'
+order: 3000
+headers:
+  - key: x-api-key
+    value: '{{apiKey}}'
+pathVariables:
+  - key: id
+    value: '1'

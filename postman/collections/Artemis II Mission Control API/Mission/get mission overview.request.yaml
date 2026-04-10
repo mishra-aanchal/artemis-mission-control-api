@@ -1,0 +1,9 @@
+$kind: http-request
+method: GET
+url: '{{baseUrl}}/mission'
+order: 1000
+headers:
+  - key: x-api-key
+    value: '{{apiKey}}'
+  - key: Accept
+    value: application/json

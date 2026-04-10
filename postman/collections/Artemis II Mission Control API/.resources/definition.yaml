@@ -1,0 +1,14 @@
+$kind: collection
+name: 'Artemis II Mission Control API'
+description: |-
+  Mission Control API for the Artemis II lunar flyby mission.
+  Generated from openapi.yaml.
+variables:
+  - key: baseUrl
+    value: 'https://artemis.up.railway.app'
+  - key: apiKey
+    value: ''
+    description: 'API key for x-api-key authenticated endpoints'
+  - key: adminKey
+    value: ''
+    description: 'Admin key for x-admin-key authenticated endpoints'

@@ -1,0 +1,21 @@
+$kind: http-request
+method: POST
+url: '{{baseUrl}}/logs'
+order: 1000
+headers:
+  - key: x-api-key
+    value: '{{apiKey}}'
+  - key: Content-Type
+    value: application/json
+body:
+  type: json
+  content: |-
+    {
+      "title": "Navigation system calibration complete",
+      "description": "All navigation instruments calibrated and verified for lunar transit.",
+      "phase": "transit",
+      "category": "navigation",
+      "crew_member": "wiseman",
+      "priority": "high",
+      "status": "complete"
+    }
