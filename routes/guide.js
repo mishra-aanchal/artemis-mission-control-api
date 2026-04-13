@@ -5,6 +5,7 @@ const path = require('path');
 const { renderGuideLogs } = require('../templates/guide_logs');
 const { renderGuideStory } = require('../templates/guide_story');
 const { renderGuideMission } = require('../templates/guide_mission');
+const { renderGuideWorkshop } = require('../templates/guide_workshop');
 
 router.get('/guide/logs', (req, res) => {
   try {
@@ -32,6 +33,10 @@ router.get('/guide/story', (req, res) => {
 
 router.get('/guide/mission', (req, res) => {
   res.send(renderGuideMission());
+});
+
+router.get('/guide/workshop', (req, res) => {
+  res.send(renderGuideWorkshop());
 });
 
 module.exports = router;
