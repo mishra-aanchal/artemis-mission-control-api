@@ -1,4 +1,4 @@
-const { getBaseCSS } = require('./shared');
+const { getBaseCSS, getThemeToggleHTML, getThemeToggleJS } = require('./shared');
 
 function renderGuideLogs(logs) {
   const css = getBaseCSS(false);
@@ -92,9 +92,22 @@ function renderGuideLogs(logs) {
     }
     .log-desc.expanded { -webkit-line-clamp: unset; }
     .read-more-btn:hover { color: #fff !important; text-shadow: 0 0 5px #fff; }
+
+    /* Light mode overrides */
+    :root[data-theme="light"] .search-bar {
+      background: rgba(255,255,255,0.9); border-color: rgba(0,0,0,0.1); box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+    }
+    :root[data-theme="light"] input,
+    :root[data-theme="light"] select {
+      background: rgba(0,0,0,0.04); border-color: rgba(0,0,0,0.12); color: #1e293b;
+    }
+    :root[data-theme="light"] .surprise-btn { color: #b8860b; border-color: rgba(184,134,11,0.3); }
+    :root[data-theme="light"] .surprise-btn:hover { background: rgba(184,134,11,0.08); text-shadow: none; }
+    :root[data-theme="light"] .log-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.08); border-color: rgba(2,132,199,0.3); }
   </style>
 </head>
 <body>
+  ${getThemeToggleHTML()}
   <div class="container" style="max-width: 1550px;">
     <h1 style="text-align:center; letter-spacing:3px; margin-bottom:8px;">ARTEMIS II — MISSION LOG LIBRARY</h1>
     <p style="text-align:center; color:#888; font-size:0.95rem; margin-bottom:40px;">Centralized data repository of standard formatted telemetry payloads</p>
@@ -208,6 +221,7 @@ function renderGuideLogs(logs) {
       });
     });
   </script>
+  <script>${getThemeToggleJS()}</script>
 </body>
 </html>`;
 }

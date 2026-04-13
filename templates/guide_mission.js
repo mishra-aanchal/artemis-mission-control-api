@@ -1,4 +1,4 @@
-const { getBaseCSS } = require('./shared');
+const { getBaseCSS, getThemeToggleHTML, getThemeToggleJS } = require('./shared');
 
 const MISSIONS = [
   {
@@ -423,9 +423,21 @@ function renderGuideMission() {
     .headers-block { color: #6ee7b7; margin-bottom: 8px; padding-bottom: 8px; border-bottom: 1px dashed rgba(255,255,255,0.1); }
     
     @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+    /* Light mode overrides */
+    :root[data-theme="light"] .chapter { border-left-color: rgba(2,132,199,0.3); }
+    :root[data-theme="light"] .chapter::before { background: #0284c7; box-shadow: none; }
+    :root[data-theme="light"] .chapter-title { color: #0f172a; }
+    :root[data-theme="light"] .chapter-lore { color: #475569; }
+    :root[data-theme="light"] .request-card { background: rgba(0,0,0,0.03); border-color: rgba(0,0,0,0.08); }
+    :root[data-theme="light"] .req-header { background: rgba(0,0,0,0.02); border-bottom-color: rgba(0,0,0,0.06); }
+    :root[data-theme="light"] .req-url { color: #0284c7; }
+    :root[data-theme="light"] .req-body-container { color: #334155; }
+    :root[data-theme="light"] .headers-block { color: #059669; border-bottom-color: rgba(0,0,0,0.08); }
   </style>
 </head>
 <body>
+  ${getThemeToggleHTML()}
   <div style="text-align:center; padding: 32px 0 16px;">
     <h1 style="letter-spacing:4px; text-shadow:0 0 15px rgba(0,229,255,0.6);">MISSION CAMPAIGNS ARCHIVE</h1>
     <p class="dim" style="max-width:600px; margin: 0 auto;">Select a narrative scenario below. Follow the chapters chronologically to complete your mission utilizing the postman API configurations.</p>
@@ -571,6 +583,7 @@ function renderGuideMission() {
     // Initialize
     selectMission(MISSIONS_DATA[0].id);
   </script>
+  <script>${getThemeToggleJS()}</script>
 </body>
 </html>`;
 }

@@ -1,4 +1,4 @@
-const { getBaseCSS, TRAJECTORY_POINTS, FIGURE_8_PATH, getSplashSVG, getSlsSVG } = require('./shared');
+const { getBaseCSS, TRAJECTORY_POINTS, FIGURE_8_PATH, getSplashSVG, getSlsSVG, getThemeToggleHTML, getThemeToggleJS } = require('./shared');
 
 function renderGuideStory(allLogs = []) {
   const css = getBaseCSS(false);
@@ -200,6 +200,7 @@ function renderGuideStory(allLogs = []) {
   </style>
 </head>
 <body>
+  ${getThemeToggleHTML()}
   <div class="container" style="max-width: 1400px;">
     <h1 style="text-align:center; letter-spacing:3px;">ARTEMIS II — DYNAMIC MISSION STORY</h1>
     <p style="text-align:center; color:#888; font-size:0.9rem; margin-bottom:40px;">Complete the 5 milestones. The JSON payloads shown below are uniquely generated for your session!</p>
@@ -403,6 +404,7 @@ function renderGuideStory(allLogs = []) {
     // Initial render
     renderStep();
   </script>
+  <script>${getThemeToggleJS()}</script>
 </body>
 </html>`;
 }

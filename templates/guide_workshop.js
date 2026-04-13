@@ -60,6 +60,40 @@ function renderGuideWorkshop() {
     }
 
     /* ========================================
+       LIGHT MODE OVERRIDES
+       ======================================== */
+    :root[data-theme="light"] {
+      --bg-primary: #f8f9fc;
+      --bg-secondary: #eef1f6;
+      --bg-card: rgba(255, 255, 255, 0.85);
+      --bg-card-hover: rgba(255, 255, 255, 0.95);
+
+      --accent-blue: #0284c7;
+      --accent-blue-dim: rgba(2, 132, 199, 0.1);
+      --accent-blue-glow: rgba(2, 132, 199, 0.2);
+      --accent-amber: #d97706;
+      --accent-amber-dim: rgba(217, 119, 6, 0.08);
+      --accent-amber-glow: rgba(217, 119, 6, 0.2);
+      --accent-green: #059669;
+      --accent-green-dim: rgba(5, 150, 105, 0.08);
+      --accent-red: #dc2626;
+
+      --text-primary: #1e293b;
+      --text-secondary: #475569;
+      --text-dim: #94a3b8;
+      --text-heading: #0f172a;
+
+      --border-subtle: rgba(0, 0, 0, 0.08);
+      --border-card: rgba(2, 132, 199, 0.15);
+      --border-active: rgba(2, 132, 199, 0.35);
+      --border-complete: rgba(5, 150, 105, 0.35);
+
+      --shadow-card: 0 2px 12px rgba(0, 0, 0, 0.08), 0 0 0 1px var(--border-card);
+      --shadow-glow-blue: 0 0 12px rgba(2, 132, 199, 0.1);
+      --shadow-glow-green: 0 0 12px rgba(5, 150, 105, 0.1);
+    }
+
+    /* ========================================
        RESET & BASE
        ======================================== */
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
@@ -78,6 +112,12 @@ function renderGuideWorkshop() {
       line-height: 1.7;
       min-height: 100vh;
       -webkit-font-smoothing: antialiased;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+    :root[data-theme="light"] body {
+      background-image:
+        radial-gradient(ellipse at 50% 0%, rgba(2, 132, 199, 0.04) 0%, transparent 60%),
+        radial-gradient(ellipse at 80% 50%, rgba(217, 119, 6, 0.03) 0%, transparent 50%);
     }
 
     /* ========================================
@@ -102,11 +142,51 @@ function renderGuideWorkshop() {
       -webkit-backdrop-filter: blur(16px);
       border-bottom: 1px solid var(--border-subtle);
       padding: 12px 0;
-      transition: box-shadow 0.3s ease;
+      transition: box-shadow 0.3s ease, background 0.3s ease;
+    }
+    :root[data-theme="light"] .progress-header {
+      background: rgba(248, 249, 252, 0.92);
     }
     .progress-header.scrolled {
       box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
     }
+    :root[data-theme="light"] .progress-header.scrolled {
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    }
+    /* ── Theme Toggle ── */
+    .theme-toggle {
+      flex-shrink: 0;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      border: 1px solid var(--border-subtle);
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--text-dim);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+      padding: 0;
+    }
+    .theme-toggle:hover {
+      background: rgba(255, 255, 255, 0.1);
+      color: var(--accent-blue);
+      border-color: var(--border-active);
+    }
+    :root[data-theme="light"] .theme-toggle:hover {
+      background: rgba(0, 0, 0, 0.06);
+    }
+    .theme-toggle:focus-visible {
+      outline: 2px solid var(--accent-blue);
+      outline-offset: 2px;
+    }
+    .theme-toggle .icon-sun,
+    .theme-toggle .icon-moon { display: none; }
+    :root[data-theme="light"] .theme-toggle .icon-moon { display: block; }
+    :root[data-theme="light"] .theme-toggle .icon-sun { display: none; }
+    :root:not([data-theme="light"]) .theme-toggle .icon-sun { display: block; }
+    :root:not([data-theme="light"]) .theme-toggle .icon-moon { display: none; }
     .progress-inner {
       max-width: 768px;
       width: 92%;
@@ -490,6 +570,29 @@ function renderGuideWorkshop() {
       background: rgba(245, 166, 35, 0.06);
       border-color: rgba(245, 166, 35, 0.2);
       color: #fde68a;
+    }
+    :root[data-theme="light"] .agent-prompt .code-block {
+      background: rgba(217, 119, 6, 0.06);
+      border-color: rgba(217, 119, 6, 0.2);
+      color: #92400e;
+    }
+    :root[data-theme="light"] .code-block {
+      background: rgba(0, 0, 0, 0.04);
+      border-color: rgba(0, 0, 0, 0.1);
+      color: #334155;
+    }
+    :root[data-theme="light"] .alert-warning {
+      color: #92400e;
+    }
+    :root[data-theme="light"] .alert-tip {
+      color: #0369a1;
+    }
+    :root[data-theme="light"] .check-item.checked {
+      background: rgba(5, 150, 105, 0.08);
+      border-color: rgba(5, 150, 105, 0.2);
+    }
+    :root[data-theme="light"] .celebration {
+      background: rgba(248, 249, 252, 0.95);
     }
 
     /* ========================================
@@ -938,6 +1041,10 @@ function renderGuideWorkshop() {
       <div class="progress-track">
         <div class="progress-fill" id="progressFill"></div>
       </div>
+      <button class="theme-toggle" id="themeToggle" aria-label="Toggle light/dark mode" title="Toggle theme">
+        <svg class="icon-sun" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+        <svg class="icon-moon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
+      </button>
     </div>
   </div>
 
@@ -1185,7 +1292,6 @@ function renderGuideWorkshop() {
             <span class="alert-emoji">📖</span>
             <strong>Self-guided references:</strong><br>
             Simple guide: <a href="https://artemis.up.railway.app/guide/story" target="_blank" rel="noopener">artemis.up.railway.app/guide/story</a><br>
-            Story-based: <a href="https://artemis.up.railway.app/guide/mission" target="_blank" rel="noopener">artemis.up.railway.app/guide/mission</a>
           </div>
 
           <hr class="section-divider">
@@ -2247,6 +2353,25 @@ and tell me status of all participants progress.</pre>
         const resetBtn = document.getElementById('resetBtn');
         if (resetBtn) {
           resetBtn.addEventListener('click', resetProgress);
+        }
+
+        // Wire up theme toggle
+        const THEME_KEY = 'artemis-theme';
+        const themeToggle = document.getElementById('themeToggle');
+        
+        // Restore saved theme
+        const savedTheme = localStorage.getItem(THEME_KEY);
+        if (savedTheme) {
+          document.documentElement.setAttribute('data-theme', savedTheme);
+        }
+
+        if (themeToggle) {
+          themeToggle.addEventListener('click', () => {
+            const current = document.documentElement.getAttribute('data-theme');
+            const next = current === 'light' ? 'dark' : 'light';
+            document.documentElement.setAttribute('data-theme', next);
+            try { localStorage.setItem(THEME_KEY, next); } catch(e) {}
+          });
         }
 
         // Scroll handler

@@ -99,6 +99,11 @@ function getBaseCSS(isComplete) {
       line-height: 1.6;
       min-height: 100vh;
       background-attachment: fixed;
+      transition: background 0.3s ease, color 0.3s ease;
+    }
+    :root[data-theme="light"] body {
+      background: #f4f6fb;
+      color: #1e293b;
     }
     .container {
       max-width: 800px;
@@ -113,10 +118,17 @@ function getBaseCSS(isComplete) {
       text-transform: uppercase;
       font-weight: 500;
     }
+    :root[data-theme="light"] h1,
+    :root[data-theme="light"] h2,
+    :root[data-theme="light"] h3 { color: #0f172a; }
     h1 { font-size: 1.6rem; margin-bottom: 8px; text-shadow: 0 0 10px rgba(0, 229, 255, 0.4); }
+    :root[data-theme="light"] h1 { text-shadow: none; }
     h2 { font-size: 1.1rem; margin: 24px 0 12px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 6px; }
+    :root[data-theme="light"] h2 { border-bottom-color: rgba(0,0,0,0.1); }
     .accent { color: ${accentColor}; text-shadow: 0 0 6px ${accentColor}88; }
+    :root[data-theme="light"] .accent { color: ${isComplete ? '#b8860b' : '#0284c7'}; text-shadow: none; }
     .dim { color: #888; }
+    :root[data-theme="light"] .dim { color: #64748b; }
     .card {
       background: rgba(17, 24, 39, 0.6);
       backdrop-filter: blur(12px);
@@ -126,6 +138,12 @@ function getBaseCSS(isComplete) {
       padding: 24px;
       margin-bottom: 24px;
       box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+      transition: background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+    :root[data-theme="light"] .card {
+      background: rgba(255, 255, 255, 0.85);
+      border-color: rgba(0, 0, 0, 0.1);
+      box-shadow: 0 2px 12px rgba(0,0,0,0.06);
     }
     .glass-row {
       display: grid;
@@ -139,9 +157,17 @@ function getBaseCSS(isComplete) {
       margin-bottom: 6px;
       transition: all 0.2s ease;
     }
+    :root[data-theme="light"] .glass-row {
+      background: rgba(0, 0, 0, 0.02);
+      border-bottom-color: rgba(0,0,0,0.06);
+    }
     .glass-row:hover {
       background: rgba(255, 255, 255, 0.07);
       border-color: rgba(0, 229, 255, 0.3);
+    }
+    :root[data-theme="light"] .glass-row:hover {
+      background: rgba(0, 0, 0, 0.04);
+      border-color: rgba(2, 132, 199, 0.3);
     }
     .progress-bar-bg {
       background: rgba(0,0,0,0.4);
@@ -152,12 +178,19 @@ function getBaseCSS(isComplete) {
       margin: auto 0;
       border: 1px solid rgba(255,255,255,0.1);
     }
+    :root[data-theme="light"] .progress-bar-bg {
+      background: rgba(0,0,0,0.06);
+      border-color: rgba(0,0,0,0.1);
+    }
     .progress-bar-fill {
       height: 100%;
       border-radius: 4px;
       background: linear-gradient(90deg, ${accentColor}, ${isComplete ? '#ffeb3b' : '#00b4d8'});
       box-shadow: 0 0 8px ${accentColor};
       transition: width 1.5s ease-out;
+    }
+    :root[data-theme="light"] .progress-bar-fill {
+      box-shadow: none;
     }
     .step-list {
       list-style: none;
@@ -169,6 +202,7 @@ function getBaseCSS(isComplete) {
     .step-list li { display: flex; align-items: center; gap: 6px; }
     .step-done { color: ${accentColor}; }
     .step-pending { color: #333; }
+    :root[data-theme="light"] .step-pending { color: #cbd5e1; }
     .stat-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
@@ -180,11 +214,17 @@ function getBaseCSS(isComplete) {
       border-radius: 6px;
       text-align: center;
     }
+    :root[data-theme="light"] .stat-item {
+      background: rgba(0,0,0,0.04);
+    }
     .stat-value {
       font-size: 1.4rem;
       font-weight: bold;
       color: ${accentColor};
       font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+    }
+    :root[data-theme="light"] .stat-value {
+      color: ${isComplete ? '#b8860b' : '#0284c7'};
     }
     .stat-label { font-size: 0.75rem; color: #888; text-transform: uppercase; letter-spacing: 1px; }
     .header {
@@ -205,6 +245,10 @@ function getBaseCSS(isComplete) {
       border-top: 1px solid #1a2035;
       letter-spacing: 2px;
     }
+    :root[data-theme="light"] .footer {
+      color: #94a3b8;
+      border-top-color: rgba(0,0,0,0.08);
+    }
     @keyframes pulse {
       0%, 100% { opacity: 1; }
       50% { opacity: 0.4; }
@@ -221,6 +265,49 @@ function getBaseCSS(isComplete) {
     .user-blip:hover circle {
       stroke-width: 2.5;
     }
+
+    /* ── Theme Toggle ── */
+    .theme-toggle {
+      position: fixed;
+      top: 16px;
+      right: 16px;
+      z-index: 200;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      border: 1px solid rgba(255,255,255,0.15);
+      background: rgba(0,0,0,0.5);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      color: #888;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+      padding: 0;
+    }
+    .theme-toggle:hover {
+      background: rgba(0,229,255,0.15);
+      color: #00e5ff;
+      border-color: rgba(0,229,255,0.4);
+    }
+    :root[data-theme="light"] .theme-toggle {
+      background: rgba(255,255,255,0.8);
+      border-color: rgba(0,0,0,0.12);
+      color: #64748b;
+    }
+    :root[data-theme="light"] .theme-toggle:hover {
+      background: rgba(0,0,0,0.06);
+      color: #0284c7;
+      border-color: rgba(2,132,199,0.3);
+    }
+    .theme-toggle .icon-sun,
+    .theme-toggle .icon-moon { display: none; }
+    :root[data-theme="light"] .theme-toggle .icon-moon { display: block; }
+    :root[data-theme="light"] .theme-toggle .icon-sun { display: none; }
+    :root:not([data-theme="light"]) .theme-toggle .icon-sun { display: block; }
+    :root:not([data-theme="light"]) .theme-toggle .icon-moon { display: none; }
   `;
 }
 
@@ -292,6 +379,32 @@ function getStepChecklist(steps) {
   return `<ul class="step-list">${items}</ul>`;
 }
 
+function getThemeToggleHTML() {
+  return `
+    <button class="theme-toggle" id="themeToggle" aria-label="Toggle light/dark mode" title="Toggle theme">
+      <svg class="icon-sun" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+      <svg class="icon-moon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
+    </button>
+  `;
+}
+
+function getThemeToggleJS() {
+  return `
+    (function() {
+      var THEME_KEY = 'artemis-theme';
+      var saved = localStorage.getItem(THEME_KEY);
+      if (saved) document.documentElement.setAttribute('data-theme', saved);
+      var btn = document.getElementById('themeToggle');
+      if (btn) btn.addEventListener('click', function() {
+        var cur = document.documentElement.getAttribute('data-theme');
+        var next = cur === 'light' ? 'dark' : 'light';
+        document.documentElement.setAttribute('data-theme', next);
+        try { localStorage.setItem(THEME_KEY, next); } catch(e) {}
+      });
+    })();
+  `;
+}
+
 module.exports = {
   TRAJECTORY_POINTS,
   FIGURE_8_PATH,
@@ -300,5 +413,7 @@ module.exports = {
   getProgressBar,
   getStepChecklist,
   getSplashSVG,
-  getSlsSVG
+  getSlsSVG,
+  getThemeToggleHTML,
+  getThemeToggleJS
 };
