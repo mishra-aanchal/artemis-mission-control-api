@@ -9,6 +9,85 @@ const TRAJECTORY_POINTS = [
 ];
 const FIGURE_8_PATH = "M 150 70 C 300 70, 450 190, 600 190 C 660 190, 660 70, 600 70 C 450 70, 300 190, 70 195";
 
+function getSplashSVG(pt) {
+  const oceanSVG = `
+    <g transform="translate(${pt.x - 30}, ${pt.y + 2})">
+      <ellipse cx="30" cy="8" rx="40" ry="10" fill="rgba(0, 150, 255, 0.2)" filter="drop-shadow(0 0 4px rgba(0,229,255,0.4))"/>
+      <path d="M -5 5 Q 10 0, 25 5 T 55 5 L 45 15 L 0 15 Z" fill="rgba(0, 200, 255, 0.4)"/>
+      <path d="M 0 10 Q 15 5, 30 10 T 60 10" fill="none" stroke="#00e5ff" stroke-width="1.5" opacity="0.8"/>
+    </g>
+  `;
+
+  const orionSVG = `
+    <g transform="translate(${pt.x}, ${pt.y - 8}) scale(0.65) rotate(15)">
+      <!-- Left Solar Panels (X-Wing) -->
+      <path d="M-12,-4 L-32,-24 L-24,-28 L-8,-8 Z" fill="#1a237e" stroke="#5c6bc0" stroke-width="1"/>
+      <path d="M-12,4 L-32,24 L-24,28 L-8,8 Z" fill="#1a237e" stroke="#5c6bc0" stroke-width="1"/>
+      
+      <!-- Right Solar Panels -->
+      <path d="M-8,-8 L8,-24 L16,-20 L-4,-4 Z" fill="#1a237e" stroke="#5c6bc0" stroke-width="1"/>
+      <path d="M-8,8 L8,24 L16,20 L-4,4 Z" fill="#1a237e" stroke="#5c6bc0" stroke-width="1"/>
+      
+      <!-- Service Module -->
+      <path d="M-15,-12 L3,-12 L3,12 L-15,12 Z" fill="#90a4ae" stroke="#cfd8dc" stroke-width="1"/>
+      <rect x="-10" y="-8" width="8" height="4" fill="#37474f" />
+      <rect x="-10" y="4" width="8" height="4" fill="#37474f" />
+
+      <!-- Crew Module (Command Cone) -->
+      <path d="M3,-14 L18,-7 L18,7 L3,14 Z" fill="#eceff1" stroke="#ffffff" stroke-width="1"/>
+      <path d="M8,-8 L14,-4" stroke="#e53935" stroke-width="1.5"/> <!-- NASA logo red swoop -->
+      <circle cx="12" cy="0" r="1.5" fill="#424242"/> <!-- Hatch window -->
+    </g>
+  `;
+  return oceanSVG + orionSVG;
+}
+
+function getSlsSVG(pt) {
+  return `
+    <g transform="translate(${pt.x}, ${pt.y - 12}) scale(0.65)">
+      <!-- Engine Exhaust / Glow -->
+      <ellipse cx="0" cy="50" rx="12" ry="20" fill="rgba(255, 150, 0, 0.4)" filter="blur(4px)">
+        <animate attributeName="opacity" values="0.4;0.8;0.4" dur="0.5s" repeatCount="indefinite"/>
+      </ellipse>
+      
+      <!-- SRB Flames -->
+      <path d="M-15,45 Q-12,70 -9,45 Z" fill="#ffb300" opacity="0.9"><animate attributeName="opacity" values="0.9;0.5;0.9" dur="0.1s" repeatCount="indefinite"/></path>
+      <path d="M9,45 Q12,70 15,45 Z" fill="#ffb300" opacity="0.9"><animate attributeName="opacity" values="0.9;0.5;0.9" dur="0.1s" repeatCount="indefinite"/></path>
+      <!-- Core Flame -->
+      <path d="M-6,45 Q0,90 6,45 Z" fill="#ff3d00" opacity="0.9"><animate attributeName="opacity" values="0.9;0.6;0.9" dur="0.15s" repeatCount="indefinite"/></path>
+      
+      <!-- Core Stage (Orange) -->
+      <rect x="-10" y="-35" width="20" height="80" fill="#e67e22" stroke="#d35400" stroke-width="1" rx="2"/>
+      
+      <!-- SRBs (White side boosters) -->
+      <path d="M-18,-15 L-11,-22 L-10,45 L-18,45 Z" fill="#f5f6fa" stroke="#dcdde1" stroke-width="1" stroke-linejoin="round"/>
+      <path d="M11,-22 L18,-15 L18,45 L10,45 Z" fill="#f5f6fa" stroke="#dcdde1" stroke-width="1" stroke-linejoin="round"/>
+      
+      <!-- Engine nozzles -->
+      <path d="M-9,45 L9,45 L11,50 L-11,50 Z" fill="#2d3436"/>
+      <path d="M-16,45 L-11,45 L-10,48 L-17,48 Z" fill="#2d3436"/>
+      <path d="M11,45 L16,45 L17,48 L10,48 Z" fill="#2d3436"/>
+
+      <!-- ICPS / Upper Stage (White) -->
+      <path d="M-10,-35 L10,-35 L8,-55 L-8,-55 Z" fill="#f5f6fa" stroke="#dcdde1" stroke-width="1"/>
+      
+      <!-- Orion Spacecraft & Launch Abort System -->
+      <path d="M-8,-55 L8,-55 L6,-65 L-6,-65 Z" fill="#ffffff" stroke="#dcdde1" stroke-width="1"/>
+      <path d="M-6,-65 L6,-65 L0,-90 Z" fill="#ffffff" stroke="#dcdde1" stroke-width="1" stroke-linejoin="round"/>
+      
+      <!-- Abort Tower Spike -->
+      <line x1="0" y1="-90" x2="0" y2="-105" stroke="#ffffff" stroke-width="2" stroke-linecap="round"/>
+    </g>
+  `;
+}
+
+function getSplashPlaceholderSVG(pt) {
+  return `
+    <circle cx="${pt.x}" cy="${pt.y}" r="15" fill="none" stroke="rgba(0,150,255,0.2)" stroke-width="1" stroke-dasharray="3,3"/>
+    <text x="${pt.x}" y="${pt.y + 24}" text-anchor="middle" font-size="9" fill="#888" font-family="-apple-system,sans-serif">Splashdown Area</text>
+  `;
+}
+
 function getBaseCSS(isComplete) {
   const accentColor = isComplete ? '#ffd600' : '#00e5ff';
   return `
@@ -131,6 +210,17 @@ function getBaseCSS(isComplete) {
       50% { opacity: 0.4; }
     }
     .pulse { animation: pulse 1.5s ease-in-out infinite; }
+    
+    .user-blip text {
+      opacity: 0;
+      transition: opacity 0.2s ease;
+    }
+    .user-blip:hover text {
+      opacity: 1;
+    }
+    .user-blip:hover circle {
+      stroke-width: 2.5;
+    }
   `;
 }
 
@@ -173,40 +263,7 @@ function getTrajectoryPath(currentStep, options = {}) {
   const earth = `<text x="150" y="130" text-anchor="middle" dominant-baseline="central" font-size="80">🌍</text>`;
   const moon = `<text x="600" y="130" text-anchor="middle" dominant-baseline="central" font-size="50">🌑</text>`;
 
-  const oceanSVG = `
-    <g transform="translate(${pts[4].x - 30}, ${pts[4].y + 2})">
-      <ellipse cx="30" cy="8" rx="40" ry="10" fill="rgba(0, 150, 255, 0.2)" filter="drop-shadow(0 0 4px rgba(0,229,255,0.4))"/>
-      <path d="M -5 5 Q 10 0, 25 5 T 55 5 L 45 15 L 0 15 Z" fill="rgba(0, 200, 255, 0.4)"/>
-      <path d="M 0 10 Q 15 5, 30 10 T 60 10" fill="none" stroke="#00e5ff" stroke-width="1.5" opacity="0.8"/>
-    </g>
-  `;
-
-  const orionSVG = `
-    <g transform="translate(${pts[4].x}, ${pts[4].y - 8}) scale(0.65) rotate(15)">
-      <!-- Left Solar Panels (X-Wing) -->
-      <path d="M-12,-4 L-32,-24 L-24,-28 L-8,-8 Z" fill="#1a237e" stroke="#5c6bc0" stroke-width="1"/>
-      <path d="M-12,4 L-32,24 L-24,28 L-8,8 Z" fill="#1a237e" stroke="#5c6bc0" stroke-width="1"/>
-      
-      <!-- Right Solar Panels -->
-      <path d="M-8,-8 L8,-24 L16,-20 L-4,-4 Z" fill="#1a237e" stroke="#5c6bc0" stroke-width="1"/>
-      <path d="M-8,8 L8,24 L16,20 L-4,4 Z" fill="#1a237e" stroke="#5c6bc0" stroke-width="1"/>
-      
-      <!-- Service Module -->
-      <path d="M-15,-12 L3,-12 L3,12 L-15,12 Z" fill="#90a4ae" stroke="#cfd8dc" stroke-width="1"/>
-      <rect x="-10" y="-8" width="8" height="4" fill="#37474f" />
-      <rect x="-10" y="4" width="8" height="4" fill="#37474f" />
-
-      <!-- Crew Module (Command Cone) -->
-      <path d="M3,-14 L18,-7 L18,7 L3,14 Z" fill="#eceff1" stroke="#ffffff" stroke-width="1"/>
-      <path d="M8,-8 L14,-4" stroke="#e53935" stroke-width="1.5"/> <!-- NASA logo red swoop -->
-      <circle cx="12" cy="0" r="1.5" fill="#424242"/> <!-- Hatch window -->
-    </g>
-  `;
-
-  const splash = currentStep >= 5 ? oceanSVG + orionSVG : `
-    <circle cx="${pts[4].x}" cy="${pts[4].y}" r="15" fill="none" stroke="rgba(0,150,255,0.2)" stroke-width="1" stroke-dasharray="3,3"/>
-    <text x="${pts[4].x}" y="${pts[4].y + 24}" text-anchor="middle" font-size="9" fill="#888" font-family="-apple-system,sans-serif">Splashdown Area</text>
-  `;
+  const splash = currentStep >= 5 ? getSplashSVG(pts[4]) : getSplashPlaceholderSVG(pts[4]);
 
   return `<svg viewBox="0 0 ${width} ${height}" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;filter:drop-shadow(0 0 6px rgba(0,229,255,0.2));">
     <style>.pulse { animation: pulse 1.5s ease-in-out infinite; } @keyframes pulse { 0%,100%{opacity:1;filter:drop-shadow(0 0 5px ${accentColor});} 50%{opacity:0.4} }</style>
@@ -242,4 +299,6 @@ module.exports = {
   getTrajectoryPath,
   getProgressBar,
   getStepChecklist,
+  getSplashSVG,
+  getSlsSVG
 };

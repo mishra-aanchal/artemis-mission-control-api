@@ -1,4 +1,4 @@
-const { getBaseCSS, TRAJECTORY_POINTS, FIGURE_8_PATH } = require('./shared');
+const { getBaseCSS, TRAJECTORY_POINTS, FIGURE_8_PATH, getSplashSVG, getSlsSVG } = require('./shared');
 const { hashCallsign, PALETTE } = require('../sigil');
 
 function renderLeaderboard(entries) {
@@ -23,20 +23,42 @@ function renderLeaderboard(entries) {
   }
 
   let dots = '';
+  // Pre-render rockets so users sit securely on top of them
+  let dynamicRockets = '';
+
   for (const [step, cluster] of Object.entries(stepClusters)) {
     const s = parseInt(step);
     const point = s > 0 && s <= 5 ? pts[s - 1] : { x: pts[0].x - 20, y: pts[0].y };
 
+    if (cluster.length > 0) {
+      if (s < 5 && s > 0) {
+        dynamicRockets += getSlsSVG(point);
+      }
+    }
+
     cluster.forEach((entry, idx) => {
       const hash = hashCallsign(entry.user.callsign);
       const colors = PALETTE[hash % PALETTE.length];
-      const offsetY = (idx - (cluster.length - 1) / 2) * 12;
+      
+      // Sunflower (Fermat's spiral) distribution for organic circular clustering
+      let offsetX = 0;
+      let offsetY = s < 5 && s > 0 ? -9 : 0; // Shift center up so it clusters around the core stage
+      if (cluster.length > 1) {
+        const goldenAngle = 137.508 * (Math.PI / 180);
+        const radius = Math.sqrt(idx) * 5.5; 
+        const theta = idx * goldenAngle;
+        offsetX = radius * Math.cos(theta);
+        offsetY += radius * Math.sin(theta);
+      }
 
-      dots += `<g>
+      dots += `<g class="user-blip" style="cursor: pointer;">
         <title>${entry.user.callsign} — ${entry.mission_status.completion_percentage}%</title>
-        <circle cx="${point.x}" cy="${point.y + offsetY}" r="5" fill="${colors.accent}" stroke="${colors.primary}" stroke-width="1.5" style="filter:drop-shadow(0 0 5px ${colors.accent});">
+        <circle cx="${point.x + offsetX}" cy="${point.y + offsetY}" r="4" fill="${colors.accent}" stroke="${colors.primary}" stroke-width="1.5" style="filter:drop-shadow(0 0 5px ${colors.accent});">
           <animate attributeName="opacity" values="1;0.5;1" dur="${1.5 + Math.random()}s" repeatCount="indefinite" />
         </circle>
+        <text x="${point.x + offsetX}" y="${point.y + offsetY - 8}" text-anchor="middle" font-size="9" fill="#fff" font-weight="bold" style="text-shadow: 0px 2px 4px rgba(0,0,0,0.8); pointer-events: none;">
+          ${entry.user.callsign}
+        </text>
       </g>`;
     });
   }
@@ -53,7 +75,9 @@ function renderLeaderboard(entries) {
     <text x="150" y="130" text-anchor="middle" dominant-baseline="central" font-size="80">🌍</text>
     <text x="600" y="130" text-anchor="middle" dominant-baseline="central" font-size="50">🌑</text>
     <path d="${pathD}" fill="none" stroke="rgba(0,229,255,0.2)" stroke-width="2" stroke-dasharray="8,6"/>
+    ${getSplashSVG(pts[4])}
     ${stepMarkers}
+    ${dynamicRockets}
     ${dots}
   </svg>`;
 
