@@ -33,13 +33,13 @@ The database schema is created automatically on startup -- no manual migration s
 
 ## The 5-Step Mission
 
-| Step | Phase       | Action                                      |
-|------|-------------|----------------------------------------------|
-| 1    | Launch      | Register (POST /register)                    |
-| 2    | Earth Orbit | Create your first log (POST /logs)           |
-| 3    | Transit     | Update a log (PATCH /logs/:id)               |
-| 4    | Lunar Flyby | Get a mission briefing (POST /mission/brief) |
-| 5    | Splashdown  | Have 5+ total logs                           |
+| Step | Phase       | Action                                                    |
+|------|-------------|-----------------------------------------------------------|
+| 1    | Launch      | Register (POST /register)                                 |
+| 2    | Earth Orbit | Create 3 logs with at least 2 categories (POST /logs)     |
+| 3    | Transit     | Update a log (PATCH /logs/:id)                            |
+| 4    | Lunar Flyby | Delete a log (DELETE /logs/:id)                           |
+| 5    | Splashdown  | Get a mission briefing (POST /mission/brief)              |
 
 ## Endpoint Reference
 
@@ -48,7 +48,7 @@ The database schema is created automatically on startup -- no manual migration s
 | GET    | /health            | Health check and API status                    | No            |
 | POST   | /register          | Register as a Flight Director                  | No            |
 | GET    | /mission           | View your mission progress and stats           | Yes           |
-| POST   | /mission/brief     | Generate a mission briefing with recommendations | Yes         |
+| POST   | /mission/brief     | Generate a mission briefing                    | Yes           |
 | GET    | /mission/debrief   | HTML debrief page (pass `api_key` as query param) | No (query key) |
 | POST   | /logs              | Create a new mission log entry                 | Yes           |
 | GET    | /logs              | List your log entries (supports filters)       | Yes           |

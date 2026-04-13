@@ -375,16 +375,15 @@ Here's everything you did to complete the mission:
 | # | Method | Endpoint | Purpose | Step |
 |---|--------|----------|---------|------|
 | 1 | POST | `/register` | Get callsign and API key | 1 |
-| 2 | POST | `/logs` | Create first log | 2 |
-| 3 | POST | `/logs` | Create log 2 | — |
-| 4 | POST | `/logs` | Create log 3 | — |
-| 5 | POST | `/logs` | Create log 4 | — |
-| 6 | POST | `/logs` | Create log 5 | 5 |
-| 7 | PATCH | `/logs/2` | Update a log | 3 |
-| 8 | POST | `/mission/brief` | Get briefing | 4 |
-| 9 | GET | `/mission` | Verify completion | — |
+| 2 | POST | `/logs` | Create first log | - |
+| 3 | POST | `/logs` | Create log 2 | - |
+| 4 | POST | `/logs` | Create log 3 (2nd cat) | 2 |
+| 5 | PATCH | `/logs/1` | Update a log | 3 |
+| 6 | DELETE | `/logs/2` | Delete a log | 4 |
+| 7 | POST | `/mission/brief` | Get briefing | 5 |
+| 8 | GET | `/mission` | Verify completion | — |
 
-**Total: 9 requests** (minimum 8 required)
+**Total: 8 requests** (minimum 7 required)
 
 ---
 
@@ -394,16 +393,15 @@ Here's everything you did to complete the mission:
 
 ```
 1. POST /register          → Step 1
-2. POST /logs              → Step 2 (log 1)
+2. POST /logs              → (log 1)
 3. POST /logs              → (log 2)
-4. POST /logs              → (log 3)
-5. POST /logs              → (log 4)
-6. POST /logs              → Step 5 (log 5)
-7. PATCH /logs/1           → Step 3
-8. POST /mission/brief     → Step 4
+4. POST /logs              → Step 2 (log 3)
+5. PATCH /logs/1           → Step 3 
+6. DELETE /logs/2          → Step 4
+7. POST /mission/brief     → Step 5
 ```
 
-**8 requests total** — the absolute minimum!
+**7 requests total** — the absolute minimum!
 
 ---
 
@@ -422,17 +420,15 @@ For participants who want to explore all endpoints:
 8.  GET    /logs?phase=transit    → Filter by phase
 9.  GET    /logs/1                → View specific log
 10. PATCH  /logs/1                → Update log
-11. POST   /logs                  → Create log 4
-12. POST   /logs (anomaly)        → Create log 5
-13. DELETE /logs/5                → Try delete anomaly (403!)
-14. DELETE /logs/2                → Delete non-anomaly (200)
-15. POST   /logs                  → Create replacement log
-16. POST   /mission/brief         → Get briefing
-17. POST   /mission/brief         → Phase-specific briefing
-18. GET    /mission               → Final status check
+11. POST   /logs (anomaly)        → Create log 4
+12. DELETE /logs/4                → Try delete anomaly (403!)
+13. DELETE /logs/2                → Delete non-anomaly (200)
+14. POST   /mission/brief         → Get briefing
+15. POST   /mission/brief         → Phase-specific briefing
+16. GET    /mission               → Final status check
 ```
 
-**18 requests** — covers every feature!
+**16 requests** — covers every feature!
 
 ---
 

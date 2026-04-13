@@ -26,12 +26,12 @@ STEP 1        2          3            4          5
 | Step | Phase | Requirement |
 |------|-------|-------------|
 | 1 | **Launch** | Register for mission |
-| 2 | **Earth Orbit** | Create your first log |
+| 2 | **Earth Orbit** | Create 3 logs with 2 diverse categories |
 | 3 | **Transit** | Update a log entry |
-| 4 | **Lunar Flyby** | Get a mission briefing |
-| 5 | **Splashdown** | Have 5+ total logs |
+| 4 | **Lunar Flyby** | Delete a log entry |
+| 5 | **Splashdown** | Get a mission briefing |
 
-**Minimum API calls to complete mission:** 8 requests
+**Minimum API calls to complete mission:** 7 requests
 
 ## 🧑‍🚀 The Crew
 

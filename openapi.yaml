@@ -91,7 +91,7 @@ paths:
               example:
                 message: "Registration successful"
                 callsign: "EAGLE-7"
-                api_key: "ak_abc123def456"
+                api_key: "{{apiKey}}"
                 name: "Neil Armstrong"
                 email: "neil@nasa.gov"
                 sigil: "https://example.com/sigils/eagle-7.png"
@@ -169,8 +169,6 @@ paths:
               phase: "transit"
               category: "navigation"
               crew_member: "wiseman"
-              priority: "high"
-              status: "complete"
       responses:
         "201":
           description: Log created successfully
@@ -185,8 +183,6 @@ paths:
                 phase: "transit"
                 category: "navigation"
                 crew_member: "wiseman"
-                priority: "high"
-                status: "complete"
                 created_at: "2026-04-10T12:00:00.000Z"
                 updated_at: "2026-04-10T12:00:00.000Z"
         "400":
@@ -216,16 +212,6 @@ paths:
           schema:
             $ref: "#/components/schemas/CrewMember"
           example: "wiseman"
-        - name: status
-          in: query
-          schema:
-            $ref: "#/components/schemas/Status"
-          example: "pending"
-        - name: priority
-          in: query
-          schema:
-            $ref: "#/components/schemas/Priority"
-          example: "high"
         - name: sort
           in: query
           description: Sort order by creation date
@@ -250,8 +236,6 @@ paths:
                   phase: "transit"
                   category: "navigation"
                   crew_member: "wiseman"
-                  priority: "high"
-                  status: "complete"
                   created_at: "2026-04-10T12:00:00.000Z"
                   updated_at: "2026-04-10T12:00:00.000Z"
                 - id: 2
@@ -260,8 +244,6 @@ paths:
                   phase: "transit"
                   category: "life-support"
                   crew_member: "koch"
-                  priority: "medium"
-                  status: "pending"
                   created_at: "2026-04-10T11:30:00.000Z"
                   updated_at: "2026-04-10T11:30:00.000Z"
         "401":
@@ -291,8 +273,6 @@ paths:
                 phase: "transit"
                 category: "navigation"
                 crew_member: "wiseman"
-                priority: "high"
-                status: "complete"
                 created_at: "2026-04-10T12:00:00.000Z"
                 updated_at: "2026-04-10T12:00:00.000Z"
         "401":
@@ -302,7 +282,7 @@ paths:
     patch:
       tags: [Logs]
       summary: Update a mission log
-      description: Updates an existing mission log. At least one field must be provided.
+      description: Updates an existing mission log. Simple field update, no special rules.
       operationId: updateLog
       security:
         - ApiKey: []
@@ -315,8 +295,8 @@ paths:
             schema:
               $ref: "#/components/schemas/LogUpdate"
             example:
-              status: "complete"
-              priority: "critical"
+              title: "Updated navigation calibration"
+              phase: "reentry"
       responses:
         "200":
           description: Log updated successfully
@@ -326,13 +306,11 @@ paths:
                 $ref: "#/components/schemas/LogResponse"
               example:
                 id: 1
-                title: "Navigation system calibration complete"
+                title: "Updated navigation calibration"
                 description: "All navigation instruments calibrated and verified for lunar transit."
-                phase: "transit"
+                phase: "reentry"
                 category: "navigation"
                 crew_member: "wiseman"
-                priority: "critical"
-                status: "complete"
                 created_at: "2026-04-10T12:00:00.000Z"
                 updated_at: "2026-04-10T12:05:00.000Z"
         "400":
@@ -372,7 +350,7 @@ paths:
     post:
       tags: [Mission]
       summary: Generate a mission briefing
-      description: Generates an AI-powered mission briefing, optionally filtered by phase.
+      description: Generates an AI-powered mission briefing, optionally filtered by phase. Returns a simple summary including log count, categories used, and crew distribution.
       operationId: createMissionBrief
       security:
         - ApiKey: []
@@ -397,7 +375,7 @@ paths:
                 properties:
                   briefing:
                     type: string
-                    example: "Transit phase briefing: All systems nominal. Navigation calibration complete. Life support operating within parameters."
+                    example: "Transit phase briefing: 5 logs recorded. Categories used: navigation, life-support. Crew distribution: wiseman (2), koch (3)."
                   phase:
                     type: string
                     example: "transit"
@@ -406,7 +384,7 @@ paths:
                     format: date-time
                     example: "2026-04-10T12:00:00.000Z"
               example:
-                briefing: "Transit phase briefing: All systems nominal. Navigation calibration complete. Life support operating within parameters."
+                briefing: "Transit phase briefing: 5 logs recorded. Categories used: navigation, life-support. Crew distribution: wiseman (2), koch (3)."
                 phase: "transit"
                 generated_at: "2026-04-10T12:00:00.000Z"
         "401":
@@ -475,7 +453,7 @@ paths:
           description: The user's API key
           schema:
             type: string
-          example: "ak_abc123def456"
+          example: "{{apiKey}}"
       responses:
         "200":
           description: Mission debrief HTML page
@@ -570,25 +548,6 @@ components:
         - hansen
       example: "wiseman"
 
-    Priority:
-      type: string
-      enum:
-        - critical
-        - high
-        - medium
-        - low
-      default: medium
-      example: "medium"
-
-    Status:
-      type: string
-      enum:
-        - pending
-        - in-progress
-        - complete
-      default: pending
-      example: "pending"
-
     RegisterResponse:
       type: object
       properties:
@@ -600,7 +559,7 @@ components:
           example: "EAGLE-7"
         api_key:
           type: string
-          example: "ak_abc123def456"
+          example: "{{apiKey}}"
         name:
           type: string
           example: "Neil Armstrong"
@@ -636,10 +595,6 @@ components:
           $ref: "#/components/schemas/Category"
         crew_member:
           $ref: "#/components/schemas/CrewMember"
-        priority:
-          $ref: "#/components/schemas/Priority"
-        status:
-          $ref: "#/components/schemas/Status"
 
     LogUpdate:
       type: object
@@ -658,10 +613,6 @@ components:
           $ref: "#/components/schemas/Category"
         crew_member:
           $ref: "#/components/schemas/CrewMember"
-        priority:
-          $ref: "#/components/schemas/Priority"
-        status:
-          $ref: "#/components/schemas/Status"
 
     LogResponse:
       type: object
@@ -681,10 +632,6 @@ components:
           $ref: "#/components/schemas/Category"
         crew_member:
           $ref: "#/components/schemas/CrewMember"
-        priority:
-          $ref: "#/components/schemas/Priority"
-        status:
-          $ref: "#/components/schemas/Status"
         created_at:
           type: string
           format: date-time

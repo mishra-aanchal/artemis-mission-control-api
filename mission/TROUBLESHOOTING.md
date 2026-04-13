@@ -201,14 +201,14 @@ curl "$BASE_URL/mission" -H "x-api-key: $API_KEY"  # Should work with valid key
 
 ### Stuck at Step 1 (Launch)
 
-**Requirement:** Create at least 1 log
+**Requirement:** Create 3 logs with at least 2 diverse categories
 
 **Check:**
 ```bash
 curl "$BASE_URL/logs" -H "x-api-key: $API_KEY"
 ```
 
-If `count` is 0, create a log.
+Verify your `count` is at least 3, and ensure the `category` fields differ across the entries.
 
 ---
 
@@ -232,6 +232,19 @@ curl -X PATCH "$BASE_URL/logs/1" \
 
 ### Stuck at Step 3 (Transit)
 
+**Requirement:** Delete a log entry
+
+**Solution:**
+**Important:** You cannot delete anomalous logs. Target a routine log!
+```bash
+curl -X DELETE "$BASE_URL/logs/2" \
+  -H "x-api-key: $API_KEY"
+```
+
+---
+
+### Stuck at Step 4 (Lunar Flyby)
+
 **Requirement:** Get a mission briefing
 
 **Solution:**
@@ -244,29 +257,16 @@ curl -X POST "$BASE_URL/mission/brief" \
 
 ---
 
-### Stuck at Step 4 (Lunar Flyby)
-
-**Requirement:** Have 5+ total logs
-
-**Check your log count:**
-```bash
-curl "$BASE_URL/logs" -H "x-api-key: $API_KEY" | grep '"count"'
-```
-
-**If under 5, create more logs.**
-
----
-
 ### Steps Not in Order
 
 Steps must be completed in sequence:
 1. Registration (automatic)
-2. Create a log
+2. Create 3 logs with 2 diverse categories
 3. Update a log
-4. Get briefing
-5. Have 5+ logs
+4. Delete a log
+5. Get briefing
 
-Even if you have 5 logs, you need to complete steps 2-4 first.
+Even if you completed a later requirement, it won't trigger until the previous step is finished!
 
 **Check your status:**
 ```bash

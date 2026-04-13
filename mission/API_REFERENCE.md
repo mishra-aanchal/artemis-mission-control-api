@@ -222,7 +222,7 @@ pre-launch, launch, orbit, transit, lunar-approach, flyby, return, reentry
 | 401 | Missing or invalid API key |
 
 **Side Effects:**
-- Records `used_mission_brief` milestone (required for Step 4)
+- Records `used_mission_brief` milestone (required for Step 5)
 
 ---
 
@@ -444,6 +444,9 @@ Delete a log entry.
 **Important:**
 - Logs with `category: "anomaly"` **cannot be deleted**
 - Anomalies are permanent mission records
+
+**Side Effects:**
+- Records deletion milestone (required for Step 4)
 
 ---
 

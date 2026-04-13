@@ -76,15 +76,13 @@ Content-Type: application/json
     "title": "T-10 minutes: All systems nominal"
   },
   "mission_status": {
-    "current_step": 2,
-    "current_phase": "orbit"
+    "current_step": 1,
+    "current_phase": "launch"
   }
 }
 ```
 
 *"Copy that, Flight. Orion is go for launch."*
-
-🌍 **Step 2 Complete: EARTH ORBIT**
 
 ---
 
@@ -139,6 +137,8 @@ Content-Type: application/json
   "crew_member": "hansen"
 }
 ```
+
+🌍 **Step 2 Complete: EARTH ORBIT** (3 logs created across diverse categories)
 
 ---
 
@@ -210,9 +210,33 @@ You exhale for the first time in an hour.
 
 ---
 
-### Chapter 6: Lunar Approach
+### Chapter 6: Clearing Diagnostics 
 
-The Moon fills the window. You need a status briefing before the critical flyby maneuver.
+The crisis is over. To ensure Mission Control telemetry isn't bloated with early flight diagnostics, you issue a purge command to delete a routine check log from hours earlier.
+
+```http
+DELETE /logs/2
+x-api-key: {{API_KEY}}
+```
+
+**Response:**
+```json
+{
+  "message": "Log entry deleted.",
+  "mission_status": {
+    "current_step": 4,
+    "current_phase": "flyby"
+  }
+}
+```
+
+🌑 **Step 4 Complete: LUNAR FLYBY**
+
+---
+
+### Chapter 7: Lunar Approach
+
+The Moon fills the window. You need a final status briefing before the splashdown maneuver.
 
 ```http
 POST /mission/brief
@@ -254,11 +278,11 @@ Content-Type: application/json
 
 The briefing confirms what you already knew — your team handled the crisis perfectly.
 
-🌑 **Step 4 Complete: LUNAR FLYBY**
+🌊 **Step 5 Complete: SPLASHDOWN**
 
 ---
 
-### Chapter 7: Splashdown
+### Chapter 8: The Return
 
 The Pacific is calm. Recovery ships are in position. Orion's parachutes bloom against the blue sky.
 
@@ -287,7 +311,7 @@ The capsule touches water. The room erupts.
 
 You smile. Not bad for a rookie.
 
-🌊 **MISSION COMPLETE: SPLASHDOWN**
+🎉 **MISSION COMPLETE**
 
 ---
 

@@ -35,7 +35,9 @@ Content-Type: application/json
 
 ---
 
-## Step 2: Create First Log (Earth Orbit) 🌍
+## Step 2: Create 3 Logs (Earth Orbit) 🌍
+
+Create 3 mission logs, ensuring you use at least **2 distinct categories**:
 
 ```http
 POST /logs
@@ -50,6 +52,7 @@ Content-Type: application/json
   "crew_member": "wiseman"
 }
 ```
+*Note: Send 2 more identical or varied POST requests to hit the threshold!*
 
 ---
 
@@ -69,7 +72,20 @@ Content-Type: application/json
 
 ---
 
-## Step 4: Get Mission Briefing (Lunar Flyby) 🌑
+## Step 4: Delete a Log (Lunar Flyby) 🌑
+
+Delete one of the logs you created to clear out old telemetry:
+
+```http
+DELETE /logs/2
+x-api-key: YOUR_API_KEY
+```
+
+---
+
+## Step 5: Get Mission Briefing (Splashdown) 🌊
+
+Generate a final mission status briefing to initiate splashdown:
 
 ```http
 POST /mission/brief
@@ -78,27 +94,6 @@ Content-Type: application/json
 
 {}
 ```
-
----
-
-## Step 5: Create 4 More Logs (Splashdown) 🌊
-
-Create 4 additional logs (you need 5+ total):
-
-```http
-POST /logs
-x-api-key: YOUR_API_KEY
-Content-Type: application/json
-
-{
-  "title": "Life support systems nominal",
-  "phase": "launch",
-  "category": "life-support",
-  "crew_member": "koch"
-}
-```
-
-Repeat with different phases/categories/crew members until you have 5+ logs.
 
 ---
 

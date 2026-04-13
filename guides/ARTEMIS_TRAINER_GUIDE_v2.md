@@ -10,7 +10,7 @@ The API and mission structure have been simplified to reduce friction:
 
 | Before | Now |
 |--------|-----|
-| 8 mission steps with specific conditions | **5 clear steps** — register, create, update, brief, 5+ logs |
+| 8 mission steps with specific conditions | **5 clear steps** — register, create 3 (2 cats), update, delete, brief |
 | 5 enums (phase, category, crew, priority, status) | **3 enums** — phase, category, crew_member |
 | Status flow enforcement | **Removed** — a log is just a record |
 | Critical priority requires description | **Removed** — no priority field |
@@ -32,13 +32,13 @@ STEP 1        2          3            4          5
 | Step | Action | API Call |
 |------|--------|---------|
 | 1 | Register | `POST /register` |
-| 2 | Create first log | `POST /logs` |
+| 2 | Create 3 logs (2 categories) | `POST /logs` |
 | 3 | Update a log | `PATCH /logs/:id` |
-| 4 | Get a briefing | `POST /mission/brief` |
-| 5 | Have 5+ total logs | Automatic |
+| 4 | Delete a log | `DELETE /logs/:id` |
+| 5 | Get a briefing | `POST /mission/brief` |
 
-**Min requests to splashdown:** ~8
-**Each step = one API concept:** create → read → update → smart endpoint → volume
+**Min requests to splashdown:** ~7
+**Each step = one API concept:** register → create → update → delete → smart endpoint
 
 ---
 
@@ -131,7 +131,7 @@ STEP 1        2          3            4          5
 
 ---
 
-#### 5:00–9:00 | Create Logs (Steps 2 + working toward 5)
+#### 5:00–9:00 | Create Logs (Step 2)
 
 **SAY:**
 
@@ -149,9 +149,7 @@ STEP 1        2          3            4          5
 }
 ```
 
-> "Send. Log created. Rocket moves to Step 2 — Orbit."
->
-> "Now create 4 more. Different phases, categories, crew members. Mix it up. You need 5 total for splashdown — start building."
+> "Send. Now create 2 more. Make sure you use at least two different categories across your logs. You need 3 total to reach Earth Orbit."
 
 **Show a second example if needed:**
 
@@ -190,17 +188,19 @@ STEP 1        2          3            4          5
 
 ---
 
-#### 10:00–11:00 | Test the Guardrails
+#### 10:00–11:00 | Delete a Log (Step 4)
 
 **SAY:**
 
+> "Step 4 — delete a log. DELETE /logs/:id."
+>
 > "Quick test. If you created a log with category 'anomaly', try deleting it."
 
 **DEMO — delete an anomaly:**
 
 > "403 Forbidden. Anomalies cannot be deleted from the record. That's a real mission rule — you never erase anomalies, you document and resolve them. You can update them, but never delete."
 >
-> "Delete a non-anomaly log — works fine. Only anomalies are protected."
+> "Delete a non-anomaly log — works fine. Rocket moves to Step 4 — Lunar Flyby."
 
 **Try an invalid value (optional, only if time):**
 
@@ -217,7 +217,7 @@ STEP 1        2          3            4          5
 
 ---
 
-#### 11:00–12:00 | Import Spec + Mission Brief (Step 4)
+#### 11:00–12:00 | Import Spec + Mission Brief (Step 5)
 
 **SAY:**
 
@@ -231,13 +231,13 @@ STEP 1        2          3            4          5
 }
 ```
 
-> "That's your mission briefing — summary of operations for that phase. Rocket moves to Step 4 — Lunar Flyby."
+> "That's your mission briefing — summary of operations for that phase. Rocket moves to Step 5 — Splashdown."
 >
 > "Now import the OpenAPI spec. Click Import, paste the URL, import."
 
 **CHECKPOINT:**
 
-> "Quick check. GET /mission — where's your rocket? If you're at Step 4 with 5+ logs, you've hit splashdown. If not, create a couple more logs."
+> "Quick check. GET /mission — where's your rocket? If you're at Step 5 and have done a briefing, you've hit splashdown."
 
 **TIMING CHECK:** Should be ~12:00. Up to 15:00 is fine (float used).
 

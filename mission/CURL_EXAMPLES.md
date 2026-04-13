@@ -55,7 +55,9 @@ curl -X POST "$BASE_URL/logs" \
 
 ---
 
-### Create Additional Logs (toward Step 5)
+### Create 2 More Logs (Earth Orbit) 🌍
+
+Ensure you use at least a second category.
 
 **Log 2 - Life Support:**
 ```bash
@@ -64,7 +66,7 @@ curl -X POST "$BASE_URL/logs" \
   -H "x-api-key: $API_KEY" \
   -d '{
     "title": "CO2 scrubber maintenance",
-    "description": "Routine check on primary CO2 scrubbing system - all nominal",
+    "description": "Routine check on primary CO2 scrubbing system",
     "phase": "launch",
     "category": "life-support",
     "crew_member": "koch"
@@ -78,38 +80,10 @@ curl -X POST "$BASE_URL/logs" \
   -H "x-api-key: $API_KEY" \
   -d '{
     "title": "Deep Space Network handoff test",
-    "description": "Verify DSN antenna handoff from Goldstone to Canberra",
+    "description": "Verify DSN antenna handoff",
     "phase": "transit",
     "category": "communication",
     "crew_member": "glover"
-  }'
-```
-
-**Log 4 - Science:**
-```bash
-curl -X POST "$BASE_URL/logs" \
-  -H "Content-Type: application/json" \
-  -H "x-api-key: $API_KEY" \
-  -d '{
-    "title": "Lunar surface photography sequence",
-    "description": "Capture high-res images of Mare Tranquillitatis",
-    "phase": "lunar-approach",
-    "category": "science",
-    "crew_member": "hansen"
-  }'
-```
-
-**Log 5 - Anomaly:**
-```bash
-curl -X POST "$BASE_URL/logs" \
-  -H "Content-Type: application/json" \
-  -H "x-api-key: $API_KEY" \
-  -d '{
-    "title": "Oxygen pressure fluctuation detected",
-    "description": "Port-side O2 tank showing intermittent pressure drops",
-    "phase": "transit",
-    "category": "anomaly",
-    "crew_member": "koch"
   }'
 ```
 
@@ -130,7 +104,16 @@ curl -X PATCH "$BASE_URL/logs/1" \
 
 ---
 
-### Step 4: Get Mission Briefing (Lunar Flyby) 🌑
+### Step 4: Delete a Log (Lunar Flyby) 🌑
+
+```bash
+curl -X DELETE "$BASE_URL/logs/2" \
+  -H "x-api-key: $API_KEY"
+```
+
+---
+
+### Step 5: Get Mission Briefing (Splashdown) 🌊
 
 **Full mission briefing:**
 ```bash
@@ -152,7 +135,7 @@ curl -X POST "$BASE_URL/mission/brief" \
 
 ---
 
-### Step 5: Verify Splashdown 🌊
+### Verify Splashdown 🎉
 
 ```bash
 curl -X GET "$BASE_URL/mission" \
@@ -356,9 +339,9 @@ RESPONSE=$(curl -s -X POST "$BASE_URL/register" \
 API_KEY=$(echo $RESPONSE | grep -o '"api_key":"[^"]*' | cut -d'"' -f4)
 echo "API Key: $API_KEY"
 
-# Create 5 logs
+# Create 3 logs with 2 diverse categories
 echo "Creating logs..."
-for i in 1 2 3 4 5; do
+for i in 1 2; do
   curl -s -X POST "$BASE_URL/logs" \
     -H "Content-Type: application/json" \
     -H "x-api-key: $API_KEY" \
@@ -366,12 +349,24 @@ for i in 1 2 3 4 5; do
   echo "Log $i created"
 done
 
+# Create log with second category
+curl -s -X POST "$BASE_URL/logs" \
+  -H "Content-Type: application/json" \
+  -H "x-api-key: $API_KEY" \
+  -d "{\"title\": \"Log Science\", \"phase\": \"transit\", \"category\": \"science\", \"crew_member\": \"wiseman\"}" > /dev/null
+echo "Log Science created"
+
 # Update a log
 echo "Updating log..."
 curl -s -X PATCH "$BASE_URL/logs/1" \
   -H "Content-Type: application/json" \
   -H "x-api-key: $API_KEY" \
   -d '{"title": "Updated Log 1"}' > /dev/null
+
+# Delete a log
+echo "Deleting log..."
+curl -s -X DELETE "$BASE_URL/logs/2" \
+  -H "x-api-key: $API_KEY" > /dev/null
 
 # Get mission briefing
 echo "Getting briefing..."
