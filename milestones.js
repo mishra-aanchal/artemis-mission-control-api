@@ -11,7 +11,7 @@ const STEP_DEFINITIONS = [
 async function computeSteps(userId) {
   const [logStats, updatedLogs, milestones] = await Promise.all([
     db.query(
-      'SELECT COUNT(*) as total_logs FROM logs WHERE user_id = $1',
+      'SELECT COUNT(*) as total_logs, COUNT(DISTINCT category) as num_categories FROM logs WHERE user_id = $1',
       [userId]
     ),
     db.query(
@@ -25,16 +25,27 @@ async function computeSteps(userId) {
   ]);
 
   const totalLogs = parseInt(logStats.rows[0].total_logs);
+  const numCategories = parseInt(logStats.rows[0].num_categories);
   const hasUpdated = parseInt(updatedLogs.rows[0].count) > 0;
   const milestoneSet = new Set(milestones.rows.map(r => r.milestone));
+
+  if (!milestoneSet.has('3_logs_created') && totalLogs >= 3 && numCategories >= 2) {
+    await db.query('INSERT INTO user_milestones (user_id, milestone) VALUES ($1, $2) ON CONFLICT DO NOTHING', [userId, '3_logs_created']);
+    milestoneSet.add('3_logs_created');
+  }
+
+  if (!milestoneSet.has('1_log_updated') && hasUpdated) {
+    await db.query('INSERT INTO user_milestones (user_id, milestone) VALUES ($1, $2) ON CONFLICT DO NOTHING', [userId, '1_log_updated']);
+    milestoneSet.add('1_log_updated');
+  }
 
   // Steps are sequential
   const checks = [
     true,                                    // Step 1: Registration
-    totalLogs >= 1,                          // Step 2: Create a log
-    hasUpdated,                              // Step 3: Update a log
-    milestoneSet.has('used_mission_brief'),  // Step 4: Get a mission briefing
-    totalLogs >= 5,                          // Step 5: Have 5+ total logs
+    milestoneSet.has('3_logs_created'),      // Step 2: 3 logs created (at least 2 categories)
+    milestoneSet.has('1_log_updated'),       // Step 3: Update a log
+    milestoneSet.has('deleted_log'),         // Step 4: Delete a log
+    milestoneSet.has('used_mission_brief'),  // Step 5: Get a mission briefing
   ];
 
   let stepsCompleted = 0;
@@ -57,7 +68,7 @@ async function computeSteps(userId) {
 async function computeStepsBatch() {
   const [logStats, updatedLogs, milestones, users] = await Promise.all([
     db.query(
-      'SELECT user_id, COUNT(*) as total_logs FROM logs GROUP BY user_id'
+      'SELECT user_id, COUNT(*) as total_logs, COUNT(DISTINCT category) as num_categories FROM logs GROUP BY user_id'
     ),
     db.query(
       'SELECT user_id, COUNT(*) as count FROM logs WHERE updated_at > created_at GROUP BY user_id'
@@ -67,7 +78,11 @@ async function computeStepsBatch() {
   ]);
 
   const statsMap = {};
-  for (const row of logStats.rows) statsMap[row.user_id] = parseInt(row.total_logs);
+  const categoriesMap = {};
+  for (const row of logStats.rows) {
+    statsMap[row.user_id] = parseInt(row.total_logs);
+    categoriesMap[row.user_id] = parseInt(row.num_categories);
+  }
 
   const updatedMap = {};
   for (const row of updatedLogs.rows) updatedMap[row.user_id] = parseInt(row.count);
@@ -80,15 +95,16 @@ async function computeStepsBatch() {
 
   return users.rows.map(user => {
     const totalLogs = statsMap[user.id] || 0;
+    const numCategories = categoriesMap[user.id] || 0;
     const hasUpdated = (updatedMap[user.id] || 0) > 0;
     const ms = milestoneMap[user.id] || new Set();
 
     const checks = [
       true,
-      totalLogs >= 1,
-      hasUpdated,
+      ms.has('3_logs_created'),
+      ms.has('1_log_updated'),
+      ms.has('deleted_log'),
       ms.has('used_mission_brief'),
-      totalLogs >= 5,
     ];
 
     let stepsCompleted = 0;

@@ -213,6 +213,11 @@ router.delete('/logs/:id', auth, async (req, res) => {
 
     await db.query('DELETE FROM logs WHERE id = $1 AND user_id = $2', [req.params.id, req.user.id]);
 
+    await db.query(
+      'INSERT INTO user_milestones (user_id, milestone) VALUES ($1, $2) ON CONFLICT DO NOTHING',
+      [req.user.id, 'deleted_log']
+    );
+
     const missionStatus = await computeSteps(req.user.id);
 
     res.json({
