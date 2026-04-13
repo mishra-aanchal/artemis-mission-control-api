@@ -1,0 +1,900 @@
+# Artemis Mission Logs Reference
+
+This document provides 10 sample JSON payloads for **each phase** of the Artemis II mission (80 logs total). You can easily copy these JSON blocks and use them in your API requests.
+
+## Phase: PRE-LAUNCH
+
+### 1. Pad Calibration
+```json
+{
+  "title": "Pad Calibration",
+  "description": "Initial INS calibration at launch pad.",
+  "phase": "pre-launch",
+  "category": "navigation",
+  "crew_member": "wiseman"
+}
+```
+
+### 2. Suit Pressure Check
+```json
+{
+  "title": "Suit Pressure Check",
+  "description": "Verifying nominal pressure in Launch and Entry Suits.",
+  "phase": "pre-launch",
+  "category": "life-support",
+  "crew_member": "glover"
+}
+```
+
+### 3. Ground Comms Link
+```json
+{
+  "title": "Ground Comms Link",
+  "description": "Testing umbilicals and ground station telemetry loops.",
+  "phase": "pre-launch",
+  "category": "communication",
+  "crew_member": "koch"
+}
+```
+
+### 4. Payload Stowage Verification
+```json
+{
+  "title": "Payload Stowage Verification",
+  "description": "Checking center of gravity and stowage for science payloads.",
+  "phase": "pre-launch",
+  "category": "science",
+  "crew_member": "hansen"
+}
+```
+
+### 5. Crew Ingress
+```json
+{
+  "title": "Crew Ingress",
+  "description": "Crew has successfully ingressed the Orion capsule.",
+  "phase": "pre-launch",
+  "category": "crew-status",
+  "crew_member": "wiseman"
+}
+```
+
+### 6. Sensor Glitch
+```json
+{
+  "title": "Sensor Glitch",
+  "description": "Brief anomaly in temperature sensor on umbilical, self-resolved.",
+  "phase": "pre-launch",
+  "category": "anomaly",
+  "crew_member": "glover"
+}
+```
+
+### 7. Targeting Parameters Load
+```json
+{
+  "title": "Targeting Parameters Load",
+  "description": "Loaded translunar target parameters into flight computer.",
+  "phase": "pre-launch",
+  "category": "navigation",
+  "crew_member": "koch"
+}
+```
+
+### 8. O2 Purge
+```json
+{
+  "title": "O2 Purge",
+  "description": "Completed cabin oxygen purge.",
+  "phase": "pre-launch",
+  "category": "life-support",
+  "crew_member": "hansen"
+}
+```
+
+### 9. Voice Checks
+```json
+{
+  "title": "Voice Checks",
+  "description": "Voice checks with Launch Control Center completed.",
+  "phase": "pre-launch",
+  "category": "communication",
+  "crew_member": "wiseman"
+}
+```
+
+### 10. Final Bio-readings
+```json
+{
+  "title": "Final Bio-readings",
+  "description": "Final pre-launch baseline medical telemetry recorded.",
+  "phase": "pre-launch",
+  "category": "crew-status",
+  "crew_member": "glover"
+}
+```
+
+## Phase: LAUNCH
+
+### 1. Roll Program Initiation
+```json
+{
+  "title": "Roll Program Initiation",
+  "description": "Pitch and roll program executed perfectly clearing the tower.",
+  "phase": "launch",
+  "category": "navigation",
+  "crew_member": "wiseman"
+}
+```
+
+### 2. G-Force Monitoring
+```json
+{
+  "title": "G-Force Monitoring",
+  "description": "Cabin acoustic and G-load profiles within expected limits.",
+  "phase": "launch",
+  "category": "life-support",
+  "crew_member": "glover"
+}
+```
+
+### 3. Max-Q Callout
+```json
+{
+  "title": "Max-Q Callout",
+  "description": "Passed through maximum dynamic pressure with solid telemetry.",
+  "phase": "launch",
+  "category": "communication",
+  "crew_member": "koch"
+}
+```
+
+### 4. SRB Separation Delay
+```json
+{
+  "title": "SRB Separation Delay",
+  "description": "Solid Rocket Boosters separated 0.2 seconds later than optimal. No structural impact.",
+  "phase": "launch",
+  "category": "anomaly",
+  "crew_member": "hansen"
+}
+```
+
+### 5. Crew Status under Load
+```json
+{
+  "title": "Crew Status under Load",
+  "description": "All crew members reporting nominal under launch G-forces.",
+  "phase": "launch",
+  "category": "crew-status",
+  "crew_member": "wiseman"
+}
+```
+
+### 6. Main Engine Cutoff
+```json
+{
+  "title": "Main Engine Cutoff",
+  "description": "MECO achieved precisely on timeline.",
+  "phase": "launch",
+  "category": "navigation",
+  "crew_member": "glover"
+}
+```
+
+### 7. Cabin Pressure Stabilization
+```json
+{
+  "title": "Cabin Pressure Stabilization",
+  "description": "Cabin pressure shifting to orbital settings as external pressure drops.",
+  "phase": "launch",
+  "category": "life-support",
+  "crew_member": "koch"
+}
+```
+
+### 8. LOS Handover
+```json
+{
+  "title": "LOS Handover",
+  "description": "Handing over communications from Florida to Bermuda tracking stations.",
+  "phase": "launch",
+  "category": "communication",
+  "crew_member": "hansen"
+}
+```
+
+### 9. Vibration Sensor Data
+```json
+{
+  "title": "Vibration Sensor Data",
+  "description": "Logging launch vibration data for structural analysis.",
+  "phase": "launch",
+  "category": "science",
+  "crew_member": "wiseman"
+}
+```
+
+### 10. Fairing Separation
+```json
+{
+  "title": "Fairing Separation",
+  "description": "Launch Abort System and forward fairings cleanly separated.",
+  "phase": "launch",
+  "category": "navigation",
+  "crew_member": "glover"
+}
+```
+
+## Phase: ORBIT
+
+### 1. Orbital Insertion complete
+```json
+{
+  "title": "Orbital Insertion complete",
+  "description": "Orion is in a stable 100x100 nm Earth parking orbit.",
+  "phase": "orbit",
+  "category": "navigation",
+  "crew_member": "wiseman"
+}
+```
+
+### 2. Solar Array deployment
+```json
+{
+  "title": "Solar Array deployment",
+  "description": "Solar arrays fully deployed and generating nominal power for ECLSS.",
+  "phase": "orbit",
+  "category": "life-support",
+  "crew_member": "glover"
+}
+```
+
+### 3. TDRSS Acquisition
+```json
+{
+  "title": "TDRSS Acquisition",
+  "description": "Locked onto Tracking and Data Relay Satellite System.",
+  "phase": "orbit",
+  "category": "communication",
+  "crew_member": "koch"
+}
+```
+
+### 4. Optical Sensor Checks
+```json
+{
+  "title": "Optical Sensor Checks",
+  "description": "Uncapped optical navigation sensors for star tracking.",
+  "phase": "orbit",
+  "category": "science",
+  "crew_member": "hansen"
+}
+```
+
+### 5. Microgravity Adaptation
+```json
+{
+  "title": "Microgravity Adaptation",
+  "description": "Crew is adapting to microgravity, removing launch suits.",
+  "phase": "orbit",
+  "category": "crew-status",
+  "crew_member": "wiseman"
+}
+```
+
+### 6. Coolant Loop Fluctuation
+```json
+{
+  "title": "Coolant Loop Fluctuation",
+  "description": "Thermal loop B showed minor pressure fluctuation, stabilizing.",
+  "phase": "orbit",
+  "category": "anomaly",
+  "crew_member": "glover"
+}
+```
+
+### 7. Perigee Raise Maneuver
+```json
+{
+  "title": "Perigee Raise Maneuver",
+  "description": "Executed small burn to circularize orbit before TLI.",
+  "phase": "orbit",
+  "category": "navigation",
+  "crew_member": "koch"
+}
+```
+
+### 8. CO2 Scrubber Activation
+```json
+{
+  "title": "CO2 Scrubber Activation",
+  "description": "Primary scrubbers online and maintaining cabin PCO2.",
+  "phase": "orbit",
+  "category": "life-support",
+  "crew_member": "hansen"
+}
+```
+
+### 9. Video Downlink
+```json
+{
+  "title": "Video Downlink",
+  "description": "First live video downlink from orbit established.",
+  "phase": "orbit",
+  "category": "communication",
+  "crew_member": "wiseman"
+}
+```
+
+### 10. Meal Prep
+```json
+{
+  "title": "Meal Prep",
+  "description": "First on-orbit meal preparation underway.",
+  "phase": "orbit",
+  "category": "crew-status",
+  "crew_member": "glover"
+}
+```
+
+## Phase: TRANSIT
+
+### 1. Translunar Injection
+```json
+{
+  "title": "Translunar Injection",
+  "description": "TLI burn complete. Escaping Earth gravity well.",
+  "phase": "transit",
+  "category": "navigation",
+  "crew_member": "wiseman"
+}
+```
+
+### 2. Exercise Equipment Setup
+```json
+{
+  "title": "Exercise Equipment Setup",
+  "description": "Assembled flywheel exercise device for transit health.",
+  "phase": "transit",
+  "category": "life-support",
+  "crew_member": "glover"
+}
+```
+
+### 3. DSN Handover
+```json
+{
+  "title": "DSN Handover",
+  "description": "Switched to Deep Space Network for high-gain communications.",
+  "phase": "transit",
+  "category": "communication",
+  "crew_member": "koch"
+}
+```
+
+### 4. Radiation Dosimetry
+```json
+{
+  "title": "Radiation Dosimetry",
+  "description": "Passing through Van Allen belts, monitoring radiation spikes.",
+  "phase": "transit",
+  "category": "science",
+  "crew_member": "hansen"
+}
+```
+
+### 5. Sleep Shift Alpha
+```json
+{
+  "title": "Sleep Shift Alpha",
+  "description": "First crew shift entering sleep period.",
+  "phase": "transit",
+  "category": "crew-status",
+  "crew_member": "wiseman"
+}
+```
+
+### 6. Star Tracker Glitch
+```json
+{
+  "title": "Star Tracker Glitch",
+  "description": "Star tracker temporarily blinded by debris, switched to secondary.",
+  "phase": "transit",
+  "category": "anomaly",
+  "crew_member": "glover"
+}
+```
+
+### 7. Mid-course Correction 1
+```json
+{
+  "title": "Mid-course Correction 1",
+  "description": "Calculated minor MCC-1 burn parameters for precise lunar targeting.",
+  "phase": "transit",
+  "category": "navigation",
+  "crew_member": "koch"
+}
+```
+
+### 8. Potable Water Check
+```json
+{
+  "title": "Potable Water Check",
+  "description": "Sampled potable water dispenser, chemistry is nominal.",
+  "phase": "transit",
+  "category": "life-support",
+  "crew_member": "hansen"
+}
+```
+
+### 9. Public Affairs Event
+```json
+{
+  "title": "Public Affairs Event",
+  "description": "Completed PAO educational streaming event from half-way to the moon.",
+  "phase": "transit",
+  "category": "communication",
+  "crew_member": "wiseman"
+}
+```
+
+### 10. Earth Observation Photography
+```json
+{
+  "title": "Earth Observation Photography",
+  "description": "Captured 'Blue Marble' images for atmospheric science reference.",
+  "phase": "transit",
+  "category": "science",
+  "crew_member": "glover"
+}
+```
+
+## Phase: LUNAR-APPROACH
+
+### 1. Moon in sight
+```json
+{
+  "title": "Moon in sight",
+  "description": "Optical navigation confirmed lunar limb coordinates.",
+  "phase": "lunar-approach",
+  "category": "navigation",
+  "crew_member": "wiseman"
+}
+```
+
+### 2. Cabin Temp Adjustment
+```json
+{
+  "title": "Cabin Temp Adjustment",
+  "description": "Adjusting thermal controls due to changing solar angles near moon.",
+  "phase": "lunar-approach",
+  "category": "life-support",
+  "crew_member": "glover"
+}
+```
+
+### 3. High-Gain Antenna Lock
+```json
+{
+  "title": "High-Gain Antenna Lock",
+  "description": "Optimizing HGA pointing ahead of the flyby.",
+  "phase": "lunar-approach",
+  "category": "communication",
+  "crew_member": "koch"
+}
+```
+
+### 4. Lunar Exosphere Measurement
+```json
+{
+  "title": "Lunar Exosphere Measurement",
+  "description": "Activated mass spectrometer to sample tenuous lunar exosphere.",
+  "phase": "lunar-approach",
+  "category": "science",
+  "crew_member": "hansen"
+}
+```
+
+### 5. Flyby Briefing
+```json
+{
+  "title": "Flyby Briefing",
+  "description": "Crew reviewing visual observation targets for the far-side pass.",
+  "phase": "lunar-approach",
+  "category": "crew-status",
+  "crew_member": "wiseman"
+}
+```
+
+### 6. Telemetry Drop
+```json
+{
+  "title": "Telemetry Drop",
+  "description": "Momentary 5-second telemetry drop as we cross the Earth-Moon gravity boundary.",
+  "phase": "lunar-approach",
+  "category": "anomaly",
+  "crew_member": "glover"
+}
+```
+
+### 7. Free-Return Verification
+```json
+{
+  "title": "Free-Return Verification",
+  "description": "Trajectory confirmed strictly free-return, no insertion burn required.",
+  "phase": "lunar-approach",
+  "category": "navigation",
+  "crew_member": "koch"
+}
+```
+
+### 8. Waste Management Cycling
+```json
+{
+  "title": "Waste Management Cycling",
+  "description": "Cycling waste management system prior to high-workload flyby phase.",
+  "phase": "lunar-approach",
+  "category": "life-support",
+  "crew_member": "hansen"
+}
+```
+
+### 9. LOS Prep
+```json
+{
+  "title": "LOS Prep",
+  "description": "Preparing for Loss of Signal as Orion travels behind the moon.",
+  "phase": "lunar-approach",
+  "category": "communication",
+  "crew_member": "wiseman"
+}
+```
+
+### 10. Magnetometer Calibration
+```json
+{
+  "title": "Magnetometer Calibration",
+  "description": "Calibrating sensors in preparation for lunar magnetic field sweep.",
+  "phase": "lunar-approach",
+  "category": "science",
+  "crew_member": "glover"
+}
+```
+
+## Phase: FLYBY
+
+### 1. Closest Approach
+```json
+{
+  "title": "Closest Approach",
+  "description": "Passed lowest altitude point over the lunar far side.",
+  "phase": "flyby",
+  "category": "navigation",
+  "crew_member": "wiseman"
+}
+```
+
+### 2. Power Management
+```json
+{
+  "title": "Power Management",
+  "description": "Running on battery power during lunar eclipse period.",
+  "phase": "flyby",
+  "category": "life-support",
+  "crew_member": "glover"
+}
+```
+
+### 3. LOS Operations
+```json
+{
+  "title": "LOS Operations",
+  "description": "Current status: Loss of Signal. Operating autonomously.",
+  "phase": "flyby",
+  "category": "communication",
+  "crew_member": "koch"
+}
+```
+
+### 4. Far Side Crater Imaging
+```json
+{
+  "title": "Far Side Crater Imaging",
+  "description": "Mapping unlit craters using infrared spectrometry.",
+  "phase": "flyby",
+  "category": "science",
+  "crew_member": "hansen"
+}
+```
+
+### 5. Visual Observation
+```json
+{
+  "title": "Visual Observation",
+  "description": "Crew visually confirming geological features on the lunar surface.",
+  "phase": "flyby",
+  "category": "crew-status",
+  "crew_member": "wiseman"
+}
+```
+
+### 6. Radiation Spike
+```json
+{
+  "title": "Radiation Spike",
+  "description": "Minor, expected radiation dose rate increase observed.",
+  "phase": "flyby",
+  "category": "anomaly",
+  "crew_member": "glover"
+}
+```
+
+### 7. Gravity Assist Trajectory
+```json
+{
+  "title": "Gravity Assist Trajectory",
+  "description": "Lunar gravity formally slinging spacecraft back toward Earth.",
+  "phase": "flyby",
+  "category": "navigation",
+  "crew_member": "koch"
+}
+```
+
+### 8. Thermal Radiator Re-orientation
+```json
+{
+  "title": "Thermal Radiator Re-orientation",
+  "description": "Adjusted radiators for deep space viewing after lunar passage.",
+  "phase": "flyby",
+  "category": "life-support",
+  "crew_member": "hansen"
+}
+```
+
+### 9. AOS Reacquired
+```json
+{
+  "title": "AOS Reacquired",
+  "description": "Acquisition of Signal! We are back in contact with Earth.",
+  "phase": "flyby",
+  "category": "communication",
+  "crew_member": "wiseman"
+}
+```
+
+### 10. Earthrise Photography
+```json
+{
+  "title": "Earthrise Photography",
+  "description": "Captured iconic Earthrise image over the lunar horizon.",
+  "phase": "flyby",
+  "category": "science",
+  "crew_member": "glover"
+}
+```
+
+## Phase: RETURN
+
+### 1. Mid-course Correction 2
+```json
+{
+  "title": "Mid-course Correction 2",
+  "description": "Executed small burn to refine the Earth entry corridor.",
+  "phase": "return",
+  "category": "navigation",
+  "crew_member": "wiseman"
+}
+```
+
+### 2. Consumables Inventory
+```json
+{
+  "title": "Consumables Inventory",
+  "description": "Audited remaining water, O2, and LiOH filters.",
+  "phase": "return",
+  "category": "life-support",
+  "crew_member": "glover"
+}
+```
+
+### 3. Data Dump
+```json
+{
+  "title": "Data Dump",
+  "description": "Downlinking all high-resolution science data recorded during LOS.",
+  "phase": "return",
+  "category": "communication",
+  "crew_member": "koch"
+}
+```
+
+### 4. Deep Space Biology
+```json
+{
+  "title": "Deep Space Biology",
+  "description": "Checking biological samples after deep space exposure.",
+  "phase": "return",
+  "category": "science",
+  "crew_member": "hansen"
+}
+```
+
+### 5. Return Prep
+```json
+{
+  "title": "Return Prep",
+  "description": "Stowing loose items and preparing cabin for reentry.",
+  "phase": "return",
+  "category": "crew-status",
+  "crew_member": "wiseman"
+}
+```
+
+### 6. Thruster Temp Warning
+```json
+{
+  "title": "Thruster Temp Warning",
+  "description": "Reaction control thruster showed transient high temp, cleared.",
+  "phase": "return",
+  "category": "anomaly",
+  "crew_member": "glover"
+}
+```
+
+### 7. Targeting Entry Interface
+```json
+{
+  "title": "Targeting Entry Interface",
+  "description": "Finalizing coordinates for the 400,000 ft entry interface.",
+  "phase": "return",
+  "category": "navigation",
+  "crew_member": "koch"
+}
+```
+
+### 8. Suit Donning
+```json
+{
+  "title": "Suit Donning",
+  "description": "Crew has put the Launch and Entry Suits back on.",
+  "phase": "return",
+  "category": "life-support",
+  "crew_member": "hansen"
+}
+```
+
+### 9. Recovery Forces Check
+```json
+{
+  "title": "Recovery Forces Check",
+  "description": "Establishing communication link with US Navy recovery ships.",
+  "phase": "return",
+  "category": "communication",
+  "crew_member": "wiseman"
+}
+```
+
+### 10. Fluid Loading
+```json
+{
+  "title": "Fluid Loading",
+  "description": "Crew performing fluid loading protocol to prepare for Earth gravity.",
+  "phase": "return",
+  "category": "crew-status",
+  "crew_member": "glover"
+}
+```
+
+## Phase: REENTRY
+
+### 1. Service Module Separation
+```json
+{
+  "title": "Service Module Separation",
+  "description": "Umbilicals severed, Service Module cleanly separated.",
+  "phase": "reentry",
+  "category": "navigation",
+  "crew_member": "wiseman"
+}
+```
+
+### 2. Internal Battery Power
+```json
+{
+  "title": "Internal Battery Power",
+  "description": "Capsule running entirely on internal survival batteries.",
+  "phase": "reentry",
+  "category": "life-support",
+  "crew_member": "glover"
+}
+```
+
+### 3. Plasma Blackout
+```json
+{
+  "title": "Plasma Blackout",
+  "description": "Entering expected communications blackout due to plasma sheath.",
+  "phase": "reentry",
+  "category": "communication",
+  "crew_member": "koch"
+}
+```
+
+### 4. Heat Shield Ablation monitoring
+```json
+{
+  "title": "Heat Shield Ablation monitoring",
+  "description": "Sensors recording ablation rate of the Avcoat heat shield.",
+  "phase": "reentry",
+  "category": "science",
+  "crew_member": "hansen"
+}
+```
+
+### 5. G-Forces Re-entry
+```json
+{
+  "title": "G-Forces Re-entry",
+  "description": "Crew experiencing peak deceleration loads.",
+  "phase": "reentry",
+  "category": "crew-status",
+  "crew_member": "wiseman"
+}
+```
+
+### 6. Parachute Reefing delay
+```json
+{
+  "title": "Parachute Reefing delay",
+  "description": "Drogue chutes reefed slightly slower than expected, but holding.",
+  "phase": "reentry",
+  "category": "anomaly",
+  "crew_member": "glover"
+}
+```
+
+### 7. Skip Re-entry maneuver
+```json
+{
+  "title": "Skip Re-entry maneuver",
+  "description": "Dipped out of atmosphere to bleed heat, re-entering for final descent.",
+  "phase": "reentry",
+  "category": "navigation",
+  "crew_member": "koch"
+}
+```
+
+### 8. Snorkel valve open
+```json
+{
+  "title": "Snorkel valve open",
+  "description": "Opened cabin air valves at 10,000 feet to equalize pressure.",
+  "phase": "reentry",
+  "category": "life-support",
+  "crew_member": "hansen"
+}
+```
+
+### 9. Blackout ended
+```json
+{
+  "title": "Blackout ended",
+  "description": "GPS and voice comms re-established with recovery forces.",
+  "phase": "reentry",
+  "category": "communication",
+  "crew_member": "wiseman"
+}
+```
+
+### 10. Splashdown
+```json
+{
+  "title": "Splashdown",
+  "description": "Main chutes deployed. Contact with the water confirmed.",
+  "phase": "reentry",
+  "category": "navigation",
+  "crew_member": "glover"
+}
+```
+
