@@ -1,7 +1,0 @@
-$kind: http-request
-method: POST
-url: '{{baseUrl}}/admin/reset'
-order: 1000
-headers:
-  - key: x-admin-key
-    value: '{{adminKey}}'
