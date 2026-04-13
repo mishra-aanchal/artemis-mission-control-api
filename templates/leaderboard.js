@@ -1,4 +1,4 @@
-const { getBaseCSS, TRAJECTORY_POINTS, FIGURE_8_PATH, getSplashSVG, getSlsSVG } = require('./shared');
+const { getBaseCSS, TRAJECTORY_POINTS, FIGURE_8_PATH, getSlsSVG } = require('./shared');
 const { hashCallsign, PALETTE } = require('../sigil');
 
 function renderLeaderboard(entries) {
@@ -15,6 +15,33 @@ function renderLeaderboard(entries) {
     stepMarkers += `<text x="${pts[i].x}" y="${pts[i].y + 24}" text-anchor="middle" font-size="9" fill="#888" font-family="-apple-system,sans-serif">${labels[i]}</text>`;
   }
 
+  // Orion module SVG (matching story page)
+  const orionSVG = `
+    <g transform="scale(0.65) rotate(15)">
+      <path d="M-12,-4 L-32,-24 L-24,-28 L-8,-8 Z" fill="#1a237e" stroke="#5c6bc0" stroke-width="1"/>
+      <path d="M-12,4 L-32,24 L-24,28 L-8,8 Z" fill="#1a237e" stroke="#5c6bc0" stroke-width="1"/>
+      <path d="M-8,-8 L8,-24 L16,-20 L-4,-4 Z" fill="#1a237e" stroke="#5c6bc0" stroke-width="1"/>
+      <path d="M-8,8 L8,24 L16,20 L-4,4 Z" fill="#1a237e" stroke="#5c6bc0" stroke-width="1"/>
+      <path d="M-15,-12 L3,-12 L3,12 L-15,12 Z" fill="#90a4ae" stroke="#cfd8dc" stroke-width="1"/>
+      <rect x="-10" y="-8" width="8" height="4" fill="#37474f" />
+      <rect x="-10" y="4" width="8" height="4" fill="#37474f" />
+      <path d="M3,-14 L18,-7 L18,7 L3,14 Z" fill="#eceff1" stroke="#ffffff" stroke-width="1"/>
+      <path d="M8,-8 L14,-4" stroke="#e53935" stroke-width="1.5"/>
+      <circle cx="12" cy="0" r="1.5" fill="#424242"/>
+    </g>
+  `;
+
+  const oceanOnlySVG = `
+    <g transform="translate(${pts[4].x - 30}, ${pts[4].y + 2})">
+      <ellipse cx="30" cy="8" rx="40" ry="10" fill="rgba(0, 150, 255, 0.2)" filter="drop-shadow(0 0 4px rgba(0,229,255,0.4))"/>
+      <path d="M -5 5 Q 10 0, 25 5 T 55 5 L 45 15 L 0 15 Z" fill="rgba(0, 200, 255, 0.4)"/>
+      <path d="M 0 10 Q 15 5, 30 10 T 60 10" fill="none" stroke="#00e5ff" stroke-width="1.5" opacity="0.8"/>
+    </g>
+  `;
+
+  // Map step -> offset-distance %
+  const STEP_DISTANCES = [0, 15, 28, 65, 100];
+
   const stepClusters = {};
   for (const entry of entries) {
     const step = entry.mission_status.current_step;
@@ -23,16 +50,24 @@ function renderLeaderboard(entries) {
   }
 
   let dots = '';
-  // Pre-render rockets so users sit securely on top of them
-  let dynamicRockets = '';
+  // Animated Orion modules along the offset-path per step cluster
+  let animatedCraft = '';
+  const usedSteps = new Set();
 
   for (const [step, cluster] of Object.entries(stepClusters)) {
     const s = parseInt(step);
     const point = s > 0 && s <= 5 ? pts[s - 1] : { x: pts[0].x - 20, y: pts[0].y };
 
-    if (cluster.length > 0) {
-      if (s < 5 && s > 0) {
-        dynamicRockets += getSlsSVG(point);
+    // Render one animated craft per unique active step (not at 0)
+    if (s > 0 && s <= 5 && !usedSteps.has(s)) {
+      usedSteps.add(s);
+      const dist = STEP_DISTANCES[Math.min(s - 1, 4)];
+      if (s === 1) {
+        // Step 1: show SLS rocket (pre-separation)
+        animatedCraft += `<g style="offset-path: path('${pathD}'); offset-rotate: auto 90deg; offset-distance: ${dist}%;">${getSlsSVG({x:0,y:0})}</g>`;
+      } else {
+        // Steps 2-5: show Orion module (post-separation)
+        animatedCraft += `<g style="offset-path: path('${pathD}'); offset-rotate: auto 90deg; offset-distance: ${dist}%;">${orionSVG}</g>`;
       }
     }
 
@@ -42,7 +77,7 @@ function renderLeaderboard(entries) {
       
       // Sunflower (Fermat's spiral) distribution for organic circular clustering
       let offsetX = 0;
-      let offsetY = s < 5 && s > 0 ? -9 : 0; // Shift center up so it clusters around the core stage
+      let offsetY = s > 0 && s <= 5 ? -9 : 0;
       if (cluster.length > 1) {
         const goldenAngle = 137.508 * (Math.PI / 180);
         const radius = Math.sqrt(idx) * 5.5; 
@@ -75,9 +110,9 @@ function renderLeaderboard(entries) {
     <text x="150" y="130" text-anchor="middle" dominant-baseline="central" font-size="80">🌍</text>
     <text x="600" y="130" text-anchor="middle" dominant-baseline="central" font-size="50">🌑</text>
     <path d="${pathD}" fill="none" stroke="rgba(0,229,255,0.2)" stroke-width="2" stroke-dasharray="8,6"/>
-    ${getSplashSVG(pts[4])}
+    ${oceanOnlySVG}
     ${stepMarkers}
-    ${dynamicRockets}
+    ${animatedCraft}
     ${dots}
   </svg>`;
 

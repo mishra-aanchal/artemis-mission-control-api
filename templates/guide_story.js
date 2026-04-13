@@ -106,14 +106,15 @@ function renderGuideStory(allLogs = []) {
   const STEPS_DATA = [
     {
       title: "Step 1: The Launch",
-      description: "Your journey begins. Authenticate with Mission Control to receive your unique callsign, API key, and mission sigil.",
+      description: "Your journey begins. Authenticate with Mission Control to receive your unique callsign, API key, and mission sigil. Enter your name below — it will be embedded into your payload.",
       method: "POST",
       endpoint: "/register",
       headers: { "Content-Type": "application/json" },
       body: {
-        "name": "Jordan Mitchell",
-        "email": "j.mitchell@nasa.gov"
-      }
+        "name": "YOUR_NAME",
+        "email": "{{$randomEmail}}"
+      },
+      isEditable: true
     },
     {
       title: "Step 2: Earth Orbit (Log 1 of 3)",
@@ -280,27 +281,75 @@ function renderGuideStory(allLogs = []) {
         });
       }
 
-      let view = \`
-        <div class="step-card active">
-          <h2 style="margin-top:0; color:#fff;">\${step.title}</h2>
-          <p style="color:#aaa; font-size:0.95rem; margin-bottom: 20px; line-height: 1.5;">\${step.description}</p>
-          
-          <div class="code-block" style="margin-bottom: 12px; font-size:1rem; border-color: rgba(0,229,255,0.4); background: rgba(0,229,255,0.05);">
-            <span class="method method-\${step.method}">\${step.method}</span>
-            <span style="color:#00e5ff;">\${step.endpoint}</span>
+      // Build the view — with special interactive mode for Step 1
+      let view;
+      if (currentStep === 0 && step.isEditable) {
+        const defaultBody = JSON.stringify(step.body, null, 2);
+        view = \`
+          <div class="step-card active">
+            <h2 style="margin-top:0; color:#fff;">\${step.title}</h2>
+            <p style="color:#aaa; font-size:0.95rem; margin-bottom: 20px; line-height: 1.5;">\${step.description}</p>
+            
+            <div style="margin-bottom:16px;">
+              <label style="display:block; color:#00e5ff; font-size:0.8rem; letter-spacing:2px; margin-bottom:6px; font-weight:bold;">FLIGHT DIRECTOR NAME</label>
+              <input id="pilot-name-input" type="text" placeholder="Enter your name..." 
+                style="width:100%; padding:12px 16px; background:rgba(0,0,0,0.6); border:1px solid rgba(0,229,255,0.4); border-radius:6px; color:#fff; font-size:1rem; font-family:monospace; outline:none; box-sizing:border-box;"
+              />
+            </div>
+            
+            <div class="code-block" style="margin-bottom: 12px; font-size:1rem; border-color: rgba(0,229,255,0.4); background: rgba(0,229,255,0.05);">
+              <span class="method method-\${step.method}">\${step.method}</span>
+              <span style="color:#00e5ff;">\${step.endpoint}</span>
+            </div>
+            
+            <div class="code-block" style="max-height: 240px;">
+              <span style="color:#6ee7b7;">// Headers</span>\\n\${headersHtml}
+              <br><span style="color:#6ee7b7;">// Body (updates as you type)</span>\\n<span id="live-body-preview" style="color:#e2e8f0;">\${defaultBody}</span>
+            </div>
+            
+            <button id="live-copy-btn" class="btn btn-copy mono" style="margin-top:8px" onclick='copyToClipboard(\\\`\${defaultBody.replace(/'/g, "\\\\'")}\\\`, this)'>[ COPY RAW JSON ]</button>
           </div>
-          
-          <div class="code-block" style="max-height: 240px;">
-            <span style="color:#6ee7b7;">// Headers</span>\\n\${headersHtml}\${bodiesHtml}
+        \`;
+      } else {
+        view = \`
+          <div class="step-card active">
+            <h2 style="margin-top:0; color:#fff;">\${step.title}</h2>
+            <p style="color:#aaa; font-size:0.95rem; margin-bottom: 20px; line-height: 1.5;">\${step.description}</p>
+            
+            <div class="code-block" style="margin-bottom: 12px; font-size:1rem; border-color: rgba(0,229,255,0.4); background: rgba(0,229,255,0.05);">
+              <span class="method method-\${step.method}">\${step.method}</span>
+              <span style="color:#00e5ff;">\${step.endpoint}</span>
+            </div>
+            
+            <div class="code-block" style="max-height: 240px;">
+              <span style="color:#6ee7b7;">// Headers</span>\\n\${headersHtml}\${bodiesHtml}
+            </div>
+            
+            <div style="display:flex; flex-direction:column; gap:4px; margin-top:8px;">
+              \${buttonsHtml}
+            </div>
           </div>
-          
-          <div style="display:flex; flex-direction:column; gap:4px; margin-top:8px;">
-            \${buttonsHtml}
-          </div>
-        </div>
-      \`;
+        \`;
+      }
 
       contentDiv.innerHTML = view;
+
+      // Special interactive mode for Step 1 (editable name)
+      if (currentStep === 0 && step.isEditable) {
+        const nameInput = document.getElementById('pilot-name-input');
+        if (nameInput) {
+          nameInput.addEventListener('input', function() {
+            const name = this.value || 'YOUR_NAME';
+            const liveBody = JSON.stringify({ name: name, email: '{{$randomEmail}}' }, null, 2);
+            document.getElementById('live-body-preview').textContent = liveBody;
+            // Update the copy button
+            const copyBtn = document.getElementById('live-copy-btn');
+            if (copyBtn) {
+              copyBtn.onclick = function() { copyToClipboard(liveBody, copyBtn); };
+            }
+          });
+        }
+      }
       rocketContainer.style.offsetDistance = PATH_DISTANCES[currentStep] + '%';
       
       // Stage Separation Logic (SLS detaches after step 0)

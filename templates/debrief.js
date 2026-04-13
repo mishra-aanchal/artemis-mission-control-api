@@ -113,6 +113,34 @@ function renderDebrief({ user, sigil, missionStatus, stats }) {
     
     @keyframes megaSplash { 0% { transform: scale(1); opacity: 0.8; stroke-width: 1.5; } 50% { transform: scale(1.5); opacity: 1; stroke-width: 3; stroke: #00e5ff; } 100% { transform: scale(1); opacity: 0; } }
     .splash-anim { animation: megaSplash 2s ease-out infinite; }
+
+    /* Tablet breakpoint */
+    @media (max-width: 960px) {
+      body { padding: 20px 12px; }
+      .hud-header { flex-direction: column; text-align: center; gap: 16px; padding: 20px; }
+      .hud-logo { width: 90px; height: 90px; }
+      .hud-identity h1 { font-size: 1.8rem; }
+      .hud-identity h2 { font-size: 0.85rem; letter-spacing: 2px; }
+      .hud-status { font-size: 0.85rem; letter-spacing: 1px; padding: 10px 16px; text-align: center; }
+      .hud-grid { grid-template-columns: 1fr; }
+      .stat-value { font-size: 1.6rem; }
+    }
+
+    /* Mobile breakpoint */
+    @media (max-width: 600px) {
+      body { padding: 12px 8px; }
+      .hud-container { gap: 16px; }
+      .hud-header { padding: 16px; gap: 12px; }
+      .hud-logo { width: 70px; height: 70px; }
+      .hud-identity h1 { font-size: 1.4rem; letter-spacing: 1px; }
+      .hud-identity h2 { font-size: 0.75rem; letter-spacing: 1px; }
+      .hud-status { font-size: 0.7rem; padding: 8px 12px; letter-spacing: 1px; word-break: break-word; }
+      .hud-card { padding: 16px; border-radius: 8px; }
+      .hud-card h3 { font-size: 0.8rem; letter-spacing: 2px; margin-bottom: 14px; }
+      .stat-grid { grid-template-columns: 1fr; gap: 10px; margin-bottom: 16px; }
+      .stat-value { font-size: 1.4rem; }
+      .stat-label { font-size: 0.65rem; }
+    }
   </style>
 </head>
 <body>
