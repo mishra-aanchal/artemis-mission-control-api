@@ -16,6 +16,7 @@ app.use('/', require('./routes/mission'));
 app.use('/', require('./routes/logs'));
 app.use('/', require('./routes/brief'));
 app.use('/', require('./routes/leaderboard'));
+app.use('/', require('./routes/guide'));
 app.use('/', require('./routes/admin'));
 
 // Global error handler
