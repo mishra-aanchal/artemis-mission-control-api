@@ -249,6 +249,18 @@ function getBaseCSS(isComplete) {
       color: #94a3b8;
       border-top-color: rgba(0,0,0,0.08);
     }
+    .footer a {
+      color: #00e5ff;
+      text-decoration: none;
+      border-bottom: 1px solid rgba(0,229,255,0.3);
+      transition: border-color 0.2s;
+    }
+    .footer a:hover { border-bottom-color: #00e5ff; }
+    :root[data-theme="light"] .footer a {
+      color: #0284c7;
+      border-bottom-color: rgba(2,132,199,0.3);
+    }
+    :root[data-theme="light"] .footer a:hover { border-bottom-color: #0284c7; }
     @keyframes pulse {
       0%, 100% { opacity: 1; }
       50% { opacity: 0.4; }

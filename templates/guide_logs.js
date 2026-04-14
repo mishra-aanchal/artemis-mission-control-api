@@ -132,6 +132,8 @@ function renderGuideLogs(logs) {
     <div id="logsContainer">
       ${htmlBody}
     </div>
+
+    <div class="footer">ARTEMIS WORKSHOP &bull; APR 2026 &bull; POSTMAN API<br>Made by <a href="https://www.linkedin.com/in/mishra-aanchal/" target="_blank" rel="noopener">Aanchal Mishra</a></div>
   </div>
 
   <script>

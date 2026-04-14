@@ -209,7 +209,7 @@ function renderDebrief({ user, sigil, missionStatus, stats }) {
     </main>
     
     <div style="text-align:center; color:#444; font-size:0.75rem; letter-spacing:2px; margin-top:20px;">
-      ARTEMIS WORKSHOP &bull; APR 2026 &bull; POSTMAN API
+      ARTEMIS WORKSHOP &bull; APR 2026 &bull; POSTMAN API<br>Made by <a href="https://www.linkedin.com/in/mishra-aanchal/" target="_blank" rel="noopener" style="color:#00e5ff; text-decoration:none;">Aanchal Mishra</a>
     </div>
   </div>
   <script>

@@ -1912,6 +1912,7 @@ and tell me status of all participants progress.</pre>
       <p class="accent" style="font-size: 0.85rem; font-family: var(--font-heading); letter-spacing: 2px;">THE API STAYS LIVE AFTER THE WORKSHOP</p>
       <p>Your callsign, sigil, and mission record persist. Keep exploring.</p>
       <p style="margin-top: 12px;">ARTEMIS WORKSHOP · APR 2026 · POSTMAN API</p>
+      <p style="margin-top: 8px;"><a href="https://www.linkedin.com/in/mishra-aanchal/" target="_blank" rel="noopener" style="color: var(--accent-blue); text-decoration: none; border-bottom: 1px solid rgba(0, 212, 255, 0.3);">Made by Aanchal Mishra</a></p>
     </div>
   </div>
 

@@ -56,7 +56,7 @@ function renderMissionDashboard({ user, sigil, missionStatus, stats }) {
     </div>
     ` : '<div class="card"><p class="dim">No mission logs yet. Start logging to advance your mission.</p></div>'}
 
-    <div class="footer">ARTEMIS WORKSHOP &bull; APR 2026 &bull; MISSION CONTROL</div>
+    <div class="footer">ARTEMIS WORKSHOP &bull; APR 2026 &bull; MISSION CONTROL<br>Made by <a href="https://www.linkedin.com/in/mishra-aanchal/" target="_blank" rel="noopener">Aanchal Mishra</a></div>
   </div>
 </body>
 </html>`;

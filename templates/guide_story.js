@@ -59,7 +59,7 @@ function renderGuideStory(allLogs = []) {
     <text x="600" y="130" text-anchor="middle" dominant-baseline="central" font-size="50">🌑</text>
     
     <!-- Path & Markers -->
-    <path d="${FIGURE_8_PATH}" fill="none" stroke="rgba(0,229,255,0.2)" stroke-width="2" stroke-dasharray="8,6"/>
+    <path d="${FIGURE_8_PATH}" fill="none" stroke="rgba(0,229,255,0.2)" stroke-width="3" stroke-dasharray="8,6"/>
     ${oceanOnlySVG}
     ${stepMarkers}
     
@@ -294,7 +294,7 @@ function renderGuideStory(allLogs = []) {
       </div>
     </div>
     
-    <div class="footer">ARTEMIS WORKSHOP &bull; APR 2026 &bull; POSTMAN API</div>
+    <div class="footer">ARTEMIS WORKSHOP &bull; APR 2026 &bull; POSTMAN API<br>Made by <a href="https://www.linkedin.com/in/mishra-aanchal/" target="_blank" rel="noopener">Aanchal Mishra</a></div>
   </div>
 
   <script>

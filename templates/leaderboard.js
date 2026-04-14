@@ -160,7 +160,7 @@ function renderLeaderboard(entries) {
       ${entries.length > 0 ? rows : '<p style="text-align:center;color:#555;">No flight directors registered yet.</p>'}
     </div>
 
-    <div class="footer">ARTEMIS WORKSHOP &bull; APR 2026 &bull; MISSION CONTROL</div>
+    <div class="footer">ARTEMIS WORKSHOP &bull; APR 2026 &bull; MISSION CONTROL<br>Made by <a href="https://www.linkedin.com/in/mishra-aanchal/" target="_blank" rel="noopener">Aanchal Mishra</a></div>
   </div>
 </body>
 </html>`;
