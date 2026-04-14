@@ -197,6 +197,75 @@ function renderGuideStory(allLogs = []) {
       100% { transform: scale(1); opacity: 0; }
     }
     .trigger-splash { animation: megaSplash 1s ease-out; }
+
+    /* ── Light Mode Overrides ── */
+    :root[data-theme="light"] .btn {
+      background: rgba(2,132,199,0.08);
+      border-color: rgba(2,132,199,0.35);
+      color: #0284c7;
+    }
+    :root[data-theme="light"] .btn:hover:not(.disabled) {
+      background: rgba(2,132,199,0.15);
+      box-shadow: 0 0 10px rgba(2,132,199,0.15);
+    }
+    :root[data-theme="light"] .btn.disabled {
+      color: #cbd5e1;
+      border-color: #e2e8f0;
+    }
+    :root[data-theme="light"] .btn-copy {
+      background: rgba(5,150,105,0.08);
+      border-color: rgba(5,150,105,0.35);
+      color: #059669;
+    }
+    :root[data-theme="light"] .btn-copy:hover {
+      background: rgba(5,150,105,0.15);
+      box-shadow: 0 0 10px rgba(5,150,105,0.15);
+    }
+    :root[data-theme="light"] .code-block {
+      background: rgba(0,0,0,0.03) !important;
+      border-color: rgba(0,0,0,0.1) !important;
+      color: #475569;
+    }
+    :root[data-theme="light"] .code-block span[style*="color:#00e5ff"],
+    :root[data-theme="light"] .code-block span[style*="color: #00e5ff"] {
+      color: #0284c7 !important;
+    }
+    :root[data-theme="light"] .code-block span[style*="color:#6ee7b7"] {
+      color: #059669 !important;
+    }
+    :root[data-theme="light"] .code-block span[style*="color:#e2e8f0"] {
+      color: #334155 !important;
+    }
+    :root[data-theme="light"] .code-block span[style*="color:#a8a29e"] {
+      color: #475569 !important;
+    }
+    :root[data-theme="light"] #pilot-name-input {
+      background: rgba(0,0,0,0.03) !important;
+      border-color: rgba(2,132,199,0.3) !important;
+      color: #0f172a !important;
+    }
+    :root[data-theme="light"] #pilot-name-input::placeholder {
+      color: #94a3b8;
+    }
+    :root[data-theme="light"] label[style*="color:#00e5ff"] {
+      color: #0284c7 !important;
+    }
+    /* Step card description text */
+    :root[data-theme="light"] .step-card p[style*="color:#aaa"] {
+      color: #475569 !important;
+    }
+    /* Step card header */
+    :root[data-theme="light"] .step-card h2[style*="color:#fff"] {
+      color: #0f172a !important;
+    }
+    /* Map text labels */
+    :root[data-theme="light"] svg text[fill="#888"] {
+      fill: #64748b;
+    }
+    /* SVG step markers */
+    :root[data-theme="light"] svg circle[fill="#111827"] {
+      fill: #f1f5f9;
+    }
   </style>
 </head>
 <body>
