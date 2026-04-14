@@ -121,13 +121,131 @@ function renderGuideWorkshop() {
     }
 
     /* ========================================
-       LAYOUT
+       LAYOUT — Docs-style two-column
        ======================================== */
-    .workshop-container {
-      max-width: 768px;
-      width: 92%;
+    .docs-layout {
+      display: flex;
+      max-width: 1280px;
+      width: 100%;
       margin: 0 auto;
-      padding: 0 0 80px;
+      min-height: calc(100vh - 52px);
+    }
+
+    /* ── Sidebar ── */
+    .sidebar {
+      position: sticky;
+      top: 52px;
+      width: 260px;
+      flex-shrink: 0;
+      height: calc(100vh - 52px);
+      overflow-y: auto;
+      padding: 24px 16px 40px 24px;
+      border-right: 1px solid var(--border-subtle);
+      background: var(--bg-secondary);
+      scrollbar-width: thin;
+      scrollbar-color: var(--border-subtle) transparent;
+      transition: background 0.3s ease;
+    }
+    .sidebar::-webkit-scrollbar { width: 4px; }
+    .sidebar::-webkit-scrollbar-track { background: transparent; }
+    .sidebar::-webkit-scrollbar-thumb { background: var(--border-subtle); border-radius: 2px; }
+    .sidebar-title {
+      font-family: var(--font-heading);
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: var(--text-dim);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+      padding-left: 12px;
+    }
+    .sidebar-part {
+      font-family: var(--font-heading);
+      font-size: 0.68rem;
+      font-weight: 600;
+      color: var(--accent-blue);
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      margin: 20px 0 8px;
+      padding-left: 12px;
+    }
+    .sidebar-part:first-of-type { margin-top: 8px; }
+    .nav-link {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 12px;
+      border-radius: var(--radius-sm);
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 0.9rem;
+      line-height: 1.4;
+      transition: all 0.15s ease;
+      border-left: 2px solid transparent;
+      margin-left: 0;
+    }
+    .nav-link:hover {
+      color: var(--text-heading);
+      background: rgba(255,255,255,0.04);
+    }
+    :root[data-theme="light"] .nav-link:hover { background: rgba(0,0,0,0.03); }
+    .nav-link.active {
+      color: var(--accent-blue);
+      background: var(--accent-blue-dim);
+      border-left-color: var(--accent-blue);
+      font-weight: 500;
+    }
+    .nav-link.completed {
+      color: var(--accent-green);
+    }
+    .nav-link.completed.active {
+      background: var(--accent-green-dim);
+      border-left-color: var(--accent-green);
+    }
+    .nav-dot {
+      flex-shrink: 0;
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      border: 1.5px solid var(--text-dim);
+      transition: all 0.2s ease;
+    }
+    .nav-link.active .nav-dot { border-color: var(--accent-blue); background: var(--accent-blue); }
+    .nav-link.completed .nav-dot { border-color: var(--accent-green); background: var(--accent-green); }
+
+    /* ── Main Content ── */
+    .content-area {
+      flex: 1;
+      min-width: 0;
+      padding: 32px 48px 80px;
+      max-width: 860px;
+    }
+
+    /* Mobile sidebar toggle */
+    .sidebar-toggle {
+      display: none;
+      position: fixed;
+      bottom: 20px;
+      left: 20px;
+      z-index: 150;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      border: 1px solid var(--border-active);
+      background: var(--bg-card);
+      backdrop-filter: blur(12px);
+      color: var(--accent-blue);
+      cursor: pointer;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+    }
+    .sidebar-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 140;
+      background: rgba(0,0,0,0.5);
     }
 
     /* ========================================
@@ -188,12 +306,13 @@ function renderGuideWorkshop() {
     :root:not([data-theme="light"]) .theme-toggle .icon-sun { display: block; }
     :root:not([data-theme="light"]) .theme-toggle .icon-moon { display: none; }
     .progress-inner {
-      max-width: 768px;
-      width: 92%;
+      max-width: 1280px;
+      width: 100%;
       margin: 0 auto;
       display: flex;
       align-items: center;
       gap: 16px;
+      padding: 0 24px;
     }
     .progress-label {
       font-family: var(--font-mono);
@@ -230,88 +349,75 @@ function renderGuideWorkshop() {
        HERO
        ======================================== */
     .hero {
-      text-align: center;
-      padding: 56px 0 40px;
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      padding: 36px 0 32px;
     }
     .hero-icon {
-      margin-bottom: 20px;
+      flex-shrink: 0;
+    }
+    .hero-text {
+      flex: 1;
     }
     .hero h1 {
       font-family: var(--font-heading);
-      font-size: clamp(1.6rem, 4vw, 2.2rem);
+      font-size: clamp(1.4rem, 3vw, 1.8rem);
       font-weight: 700;
       color: var(--text-heading);
       letter-spacing: 1.5px;
       text-transform: uppercase;
       text-shadow: 0 0 30px var(--accent-blue-glow);
-      margin-bottom: 12px;
+      margin-bottom: 4px;
     }
     .hero p {
       color: var(--text-secondary);
-      font-size: 1rem;
-      max-width: 540px;
-      margin: 0 auto;
+      font-size: 0.95rem;
       line-height: 1.6;
+      margin-top: 8px;
     }
 
     /* ========================================
        RESOURCES PANEL
        ======================================== */
-    .resources-toggle {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      background: var(--accent-blue-dim);
-      border: 1px solid rgba(0, 212, 255, 0.2);
-      border-radius: var(--radius-md);
-      padding: 10px 20px;
-      color: var(--accent-blue);
-      font-family: var(--font-mono);
-      font-size: 0.8rem;
-      font-weight: 500;
-      cursor: pointer;
-      margin: 0 auto 32px;
-      transition: all 0.2s ease;
-      letter-spacing: 0.5px;
+    .resources-section {
+      margin-bottom: 36px;
     }
-    .resources-toggle:hover {
-      background: rgba(0, 212, 255, 0.18);
-      box-shadow: var(--shadow-glow-blue);
+    .resources-section h3 {
+      font-family: var(--font-heading);
+      font-size: 0.7rem;
+      font-weight: 600;
+      color: var(--text-dim);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 16px;
     }
-    .resources-toggle:focus-visible {
-      outline: 2px solid var(--accent-blue);
-      outline-offset: 2px;
-    }
-    .resources-toggle svg {
-      transition: transform 0.3s ease;
-    }
-    .resources-toggle.open svg {
-      transform: rotate(180deg);
-    }
-    .resources-panel {
-      max-height: 0;
-      overflow: hidden;
-      transition: max-height 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 0.3s ease;
-      opacity: 0;
-      margin-bottom: 8px;
-    }
-    .resources-panel.open {
-      max-height: 600px;
-      opacity: 1;
-      margin-bottom: 32px;
-    }
-    .resources-grid {
+    .resources-columns {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-      gap: 10px;
-      padding: 4px 0;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+    .resources-col-title {
+      font-family: var(--font-heading);
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--accent-blue);
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+      padding-bottom: 6px;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+    .resources-list {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
     }
     .resource-card {
       display: flex;
       align-items: center;
       gap: 10px;
-      padding: 12px 14px;
+      padding: 10px 12px;
       background: var(--bg-card);
       border: 1px solid var(--border-subtle);
       border-radius: var(--radius-sm);
@@ -324,18 +430,57 @@ function renderGuideWorkshop() {
       background: var(--bg-card-hover);
       border-color: var(--border-active);
       box-shadow: var(--shadow-glow-blue);
-      transform: translateY(-1px);
     }
     .resource-card .rc-icon {
       flex-shrink: 0;
-      width: 28px;
-      height: 28px;
+      width: 26px;
+      height: 26px;
       display: flex;
       align-items: center;
       justify-content: center;
       background: var(--accent-blue-dim);
-      border-radius: 6px;
-      font-size: 14px;
+      border-radius: 5px;
+      font-size: 13px;
+    }
+    .resource-card .rc-label {
+      flex: 1;
+      min-width: 0;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .resource-card .rc-actions {
+      flex-shrink: 0;
+      display: flex;
+      gap: 4px;
+      opacity: 0;
+      transition: opacity 0.15s ease;
+    }
+    .resource-card:hover .rc-actions {
+      opacity: 1;
+    }
+    .rc-action-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 26px;
+      height: 26px;
+      border-radius: 4px;
+      border: 1px solid var(--border-subtle);
+      background: transparent;
+      color: var(--text-dim);
+      cursor: pointer;
+      transition: all 0.15s ease;
+      padding: 0;
+    }
+    .rc-action-btn:hover {
+      background: var(--accent-blue-dim);
+      color: var(--accent-blue);
+      border-color: var(--border-active);
+    }
+    .rc-action-btn.copied {
+      color: var(--accent-green);
+      border-color: var(--border-complete);
     }
 
     /* ========================================
@@ -365,41 +510,20 @@ function renderGuideWorkshop() {
     }
 
     /* ========================================
-       STEP CARDS (Collapsible)
+       STEP SECTIONS (Docs-style, always visible)
        ======================================== */
-    .step-card {
-      background: var(--bg-card);
-      border: 1px solid var(--border-card);
-      border-left: 3px solid var(--border-card);
-      border-radius: var(--radius-lg);
-      margin-bottom: 16px;
-      overflow: hidden;
-      transition: border-color 0.4s ease, box-shadow 0.4s ease;
+    .step-section {
+      padding-top: 8px;
+      margin-bottom: 48px;
+      scroll-margin-top: 68px;
     }
-    .step-card.completed {
-      border-left-color: var(--accent-green);
-      box-shadow: var(--shadow-glow-green);
-    }
-    .step-card.active {
-      border-left-color: var(--accent-blue);
-      box-shadow: var(--shadow-glow-blue);
-    }
-    .step-header {
+    .step-section-header {
       display: flex;
       align-items: center;
       gap: 14px;
-      padding: 18px 20px;
-      cursor: pointer;
-      user-select: none;
-      transition: background 0.2s ease;
-    }
-    .step-header:hover {
-      background: rgba(255, 255, 255, 0.02);
-    }
-    .step-header:focus-visible {
-      outline: 2px solid var(--accent-blue);
-      outline-offset: -2px;
-      border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+      margin-bottom: 20px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid var(--border-subtle);
     }
     .step-badge {
       flex-shrink: 0;
@@ -417,7 +541,7 @@ function renderGuideWorkshop() {
       border: 1px solid rgba(0, 212, 255, 0.25);
       transition: all 0.3s ease;
     }
-    .step-card.completed .step-badge {
+    .step-section.completed .step-badge {
       background: var(--accent-green-dim);
       color: var(--accent-green);
       border-color: rgba(16, 185, 129, 0.3);
@@ -425,32 +549,13 @@ function renderGuideWorkshop() {
     .step-title {
       flex: 1;
       font-family: var(--font-heading);
-      font-size: 1rem;
+      font-size: 1.15rem;
       font-weight: 600;
       color: var(--text-heading);
       letter-spacing: 0.3px;
     }
-    .step-chevron {
-      flex-shrink: 0;
-      width: 20px;
-      height: 20px;
-      color: var(--text-dim);
-      transition: transform 0.3s ease;
-    }
-    .step-card.open .step-chevron {
-      transform: rotate(180deg);
-    }
-    .step-body {
-      max-height: 0;
-      overflow: hidden;
-      transition: max-height 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-    }
-    .step-card.open .step-body {
-      max-height: 5000px;
-    }
     .step-content {
-      padding: 0 20px 24px;
-      border-top: 1px solid var(--border-subtle);
+      padding: 0;
     }
 
     /* ========================================
@@ -738,7 +843,11 @@ function renderGuideWorkshop() {
       border-radius: var(--radius-md);
       padding: 18px;
       margin: 12px 0;
-      transition: border-color 0.3s ease;
+      transition: border-color 0.3s ease, background 0.3s ease;
+    }
+    :root[data-theme="light"] .log-card {
+      background: rgba(0, 0, 0, 0.03);
+      border-color: rgba(0, 0, 0, 0.1);
     }
     .log-card.completed {
       border-color: rgba(16, 185, 129, 0.3);
@@ -1018,15 +1127,28 @@ function renderGuideWorkshop() {
     /* ========================================
        RESPONSIVE
        ======================================== */
+    @media (max-width: 900px) {
+      .sidebar {
+        position: fixed;
+        top: 52px;
+        left: -280px;
+        z-index: 145;
+        width: 270px;
+        height: calc(100vh - 52px);
+        transition: left 0.3s ease;
+        box-shadow: 4px 0 30px rgba(0,0,0,0.5);
+      }
+      .sidebar.open { left: 0; }
+      .sidebar-toggle { display: flex; }
+      .sidebar-overlay.show { display: block; }
+      .content-area { padding: 24px 20px 80px; }
+    }
     @media (max-width: 600px) {
-      .workshop-container { width: 96%; }
-      .step-content { padding: 0 14px 20px; }
-      .step-header { padding: 14px 14px; gap: 10px; }
-      .resources-grid { grid-template-columns: 1fr; }
-      .progress-inner { gap: 10px; }
+      .content-area { padding: 20px 14px 80px; }
+      .step-content { padding: 0; }
+      .resources-columns { grid-template-columns: 1fr; }
+      .progress-inner { gap: 10px; padding: 0 14px; }
       .progress-label { font-size: 0.68rem; }
-      .hero { padding: 40px 0 28px; }
-      .hero h1 { font-size: 1.3rem; }
       .code-block { font-size: 0.75rem; padding: 12px 14px; }
       .mcp-table td:first-child { width: auto; }
     }
@@ -1048,22 +1170,68 @@ function renderGuideWorkshop() {
     </div>
   </div>
 
-  <div class="workshop-container">
+  <!-- ============== MOBILE SIDEBAR TOGGLE ============== -->
+  <button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle navigation">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+  </button>
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+  <div class="docs-layout">
+    <!-- ============== SIDEBAR NAV ============== -->
+    <nav class="sidebar" id="sidebar" role="navigation" aria-label="Workshop steps">
+      <div class="sidebar-title">Workshop Guide</div>
+
+      <div class="sidebar-part">Part 1 — Git-Native API</div>
+      <a href="#section-1" class="nav-link" data-nav="1"><span class="nav-dot"></span>1. Blank Workspace</a>
+      <a href="#section-2" class="nav-link" data-nav="2"><span class="nav-dot"></span>2. Import OpenAPI Spec</a>
+      <a href="#section-3" class="nav-link" data-nav="3"><span class="nav-dot"></span>3. Environment (Agent)</a>
+      <a href="#section-4" class="nav-link" data-nav="4"><span class="nav-dot"></span>4. Update Env Variable</a>
+
+      <div class="sidebar-part">Part 2 — Agent Mode</div>
+      <a href="#section-5" class="nav-link" data-nav="5"><span class="nav-dot"></span>5. Health Check & Register</a>
+      <a href="#section-6" class="nav-link" data-nav="6"><span class="nav-dot"></span>6. Auto-Save API Key</a>
+
+      <div class="sidebar-part">Part 3 — Mission Sprint</div>
+      <a href="#section-7" class="nav-link" data-nav="7"><span class="nav-dot"></span>7. Mission Dashboard</a>
+      <a href="#section-8" class="nav-link" data-nav="8"><span class="nav-dot"></span>8. Docs + Log Blitz</a>
+      <a href="#section-9" class="nav-link" data-nav="9"><span class="nav-dot"></span>9. Complete Mission</a>
+
+      <div class="sidebar-part">Part 4 — Advanced</div>
+      <a href="#section-10" class="nav-link" data-nav="10"><span class="nav-dot"></span>10. Integration Tests</a>
+      <a href="#section-11" class="nav-link" data-nav="11"><span class="nav-dot"></span>11. MCP Agent</a>
+    </nav>
+
+    <!-- ============== CONTENT AREA ============== -->
+    <main class="content-area">
 
     <!-- ============== HERO ============== -->
     <div class="hero">
       <div class="hero-icon">
         <svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <style>
+            .hero-orbit { stroke: rgba(0,212,255,0.15); }
+            .hero-orbit-inner { stroke: rgba(0,212,255,0.08); }
+            .hero-moon { fill: #1a1a2e; stroke: rgba(200,200,200,0.3); }
+            .hero-moon-crater1 { fill: rgba(200,200,200,0.15); }
+            .hero-moon-crater2 { fill: rgba(200,200,200,0.1); }
+            .hero-rocket-body { fill: #e2e8f0; stroke: rgba(255,255,255,0.3); }
+            :root[data-theme="light"] .hero-orbit { stroke: rgba(2,132,199,0.2); }
+            :root[data-theme="light"] .hero-orbit-inner { stroke: rgba(2,132,199,0.12); }
+            :root[data-theme="light"] .hero-moon { fill: #e2e8f0; stroke: rgba(0,0,0,0.15); }
+            :root[data-theme="light"] .hero-moon-crater1 { fill: rgba(0,0,0,0.08); }
+            :root[data-theme="light"] .hero-moon-crater2 { fill: rgba(0,0,0,0.05); }
+            :root[data-theme="light"] .hero-rocket-body { fill: #334155; stroke: rgba(0,0,0,0.15); }
+          </style>
           <!-- Moon arc -->
-          <circle cx="40" cy="40" r="35" stroke="rgba(0,212,255,0.15)" stroke-width="1" fill="none"/>
-          <circle cx="40" cy="40" r="28" stroke="rgba(0,212,255,0.08)" stroke-width="1" fill="none"/>
+          <circle cx="40" cy="40" r="35" class="hero-orbit" stroke-width="1" fill="none"/>
+          <circle cx="40" cy="40" r="28" class="hero-orbit-inner" stroke-width="1" fill="none"/>
           <!-- Moon -->
-          <circle cx="58" cy="18" r="8" fill="#1a1a2e" stroke="rgba(200,200,200,0.3)" stroke-width="1"/>
-          <circle cx="56" cy="16" r="2" fill="rgba(200,200,200,0.15)"/>
-          <circle cx="60" cy="20" r="1.5" fill="rgba(200,200,200,0.1)"/>
+          <circle cx="58" cy="18" r="8" class="hero-moon" stroke-width="1"/>
+          <circle cx="56" cy="16" r="2" class="hero-moon-crater1"/>
+          <circle cx="60" cy="20" r="1.5" class="hero-moon-crater2"/>
           <!-- Rocket -->
           <g transform="translate(32, 52) rotate(-45)">
-            <path d="M0,-20 C4,-20 6,-15 6,-8 L6,4 L4,8 L-4,8 L-6,4 L-6,-8 C-6,-15 -4,-20 0,-20Z" fill="#e2e8f0" stroke="rgba(255,255,255,0.3)" stroke-width="0.5"/>
+            <path d="M0,-20 C4,-20 6,-15 6,-8 L6,4 L4,8 L-4,8 L-6,4 L-6,-8 C-6,-15 -4,-20 0,-20Z" class="hero-rocket-body" stroke-width="0.5"/>
             <path d="M-6,0 L-10,6 L-6,4Z" fill="var(--accent-blue)"/>
             <path d="M6,0 L10,6 L6,4Z" fill="var(--accent-blue)"/>
             <circle cx="0" cy="-10" r="2" fill="var(--accent-blue)" opacity="0.6"/>
@@ -1074,54 +1242,107 @@ function renderGuideWorkshop() {
           <path d="M26,60 Q10,40 26,22" stroke="var(--accent-blue)" stroke-width="1" fill="none" stroke-dasharray="3,3" opacity="0.4"/>
         </svg>
       </div>
-      <h1>Artemis Mission Control</h1>
-      <h1 style="font-size: clamp(1rem, 2.5vw, 1.3rem); font-weight: 500; color: var(--text-secondary); text-shadow: none; margin-top: -4px;">API & MCP Workshop</h1>
-      <p style="margin-top: 14px;">Your hands-on guide to Git-native API workflows, AI-powered testing, and MCP agent integration.</p>
+      <div class="hero-text">
+        <h1>Artemis Mission Control</h1>
+        <h1 style="font-size: clamp(0.85rem, 2vw, 1.1rem); font-weight: 500; color: var(--text-secondary); text-shadow: none; margin-top: -2px;">API & MCP Workshop</h1>
+        <p>Your hands-on guide to Git-native API workflows, AI-powered testing, and MCP agent integration.</p>
+      </div>
     </div>
 
-    <!-- ============== RESOURCES TOGGLE ============== -->
-    <button class="resources-toggle" id="resourcesToggle" aria-expanded="false" aria-controls="resourcesPanel">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
-      Workshop Resources
-    </button>
-    <div class="resources-panel" id="resourcesPanel">
-      <div class="resources-grid">
-        <a href="https://github.com/mishra-aanchal/artemis-mission-control-api-workshop" target="_blank" rel="noopener" class="resource-card">
-          <div class="rc-icon">📦</div>
-          <div>API Git Repo</div>
-        </a>
-        <a href="https://github.com/mishra-aanchal/artemis-mission-control-api-workshop/archive/refs/heads/main.zip" target="_blank" rel="noopener" class="resource-card">
-          <div class="rc-icon">⬇️</div>
-          <div>Download Code (ZIP)</div>
-        </a>
-        <a href="https://raw.githubusercontent.com/mishra-aanchal/artemis-mission-control-api-workshop/refs/heads/main/openapi.yaml" target="_blank" rel="noopener" class="resource-card">
-          <div class="rc-icon">📄</div>
-          <div>OpenAPI Spec</div>
-        </a>
-        <a href="https://artemis.up.railway.app" target="_blank" rel="noopener" class="resource-card">
-          <div class="rc-icon">🚀</div>
-          <div>Hosted API URL</div>
-        </a>
-        <a href="https://docs.google.com/presentation/d/1VcF-BT7PYGcL4WURUsw9eG9ms-GO2IVn/edit" target="_blank" rel="noopener" class="resource-card">
-          <div class="rc-icon">📊</div>
-          <div>Workshop Slides</div>
-        </a>
-        <a href="https://academy.postman.com/meet-agent-mode" target="_blank" rel="noopener" class="resource-card">
-          <div class="rc-icon">🤖</div>
-          <div>Meet Agent Mode</div>
-        </a>
-        <a href="https://postman.com/templates/agent-mode/" target="_blank" rel="noopener" class="resource-card">
-          <div class="rc-icon">💡</div>
-          <div>Prompt Library</div>
-        </a>
-        <a href="https://github.com/postmanlabs/postman-mcp-server" target="_blank" rel="noopener" class="resource-card">
-          <div class="rc-icon">🔌</div>
-          <div>Postman MCP Server</div>
-        </a>
-        <a href="https://github.com/Postman-Devrel/postman-claude-code-plugin" target="_blank" rel="noopener" class="resource-card">
-          <div class="rc-icon">🧩</div>
-          <div>Claude Code Plugin</div>
-        </a>
+    <!-- ============== RESOURCES (always visible, two columns) ============== -->
+    <div class="resources-section">
+      <h3>Workshop Resources</h3>
+      <div class="resources-columns">
+        <div>
+          <div class="resources-col-title">Workshop Materials</div>
+          <div class="resources-list">
+            <div class="resource-card" data-url="https://github.com/mishra-aanchal/artemis-mission-control-api-workshop">
+              <div class="rc-icon">📦</div>
+              <div class="rc-label">API Git Repo</div>
+              <div class="rc-actions">
+                <button class="rc-action-btn rc-copy" title="Copy URL"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg></button>
+                <button class="rc-action-btn rc-view" title="Open link"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></button>
+              </div>
+            </div>
+            <div class="resource-card" data-url="https://www.postman.com/devrel/postman-git-native-and-agentic-workshop/overview">
+              <div class="rc-icon"><img src="https://uxwing.com/wp-content/themes/uxwing/download/brands-and-social-media/postman-icon.png" alt="Postman" width="18" height="18" style="display:block;"></div>
+              <div class="rc-label">Postman Workspace</div>
+              <div class="rc-actions">
+                <button class="rc-action-btn rc-copy" title="Copy URL"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg></button>
+                <button class="rc-action-btn rc-view" title="Open link"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></button>
+              </div>
+            </div>
+            <div class="resource-card" data-url="https://github.com/mishra-aanchal/artemis-mission-control-api-workshop/archive/refs/heads/main.zip">
+              <div class="rc-icon">⬇️</div>
+              <div class="rc-label">Download Code (ZIP)</div>
+              <div class="rc-actions">
+                <button class="rc-action-btn rc-copy" title="Copy URL"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg></button>
+                <button class="rc-action-btn rc-view" title="Open link"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></button>
+              </div>
+            </div>
+            <div class="resource-card" data-url="https://raw.githubusercontent.com/mishra-aanchal/artemis-mission-control-api-workshop/refs/heads/main/openapi.yaml">
+              <div class="rc-icon">📄</div>
+              <div class="rc-label">OpenAPI Spec</div>
+              <div class="rc-actions">
+                <button class="rc-action-btn rc-copy" title="Copy URL"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg></button>
+                <button class="rc-action-btn rc-view" title="Open link"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></button>
+              </div>
+            </div>
+            <div class="resource-card" data-url="https://artemis.up.railway.app">
+              <div class="rc-icon">🚀</div>
+              <div class="rc-label">Hosted API URL</div>
+              <div class="rc-actions">
+                <button class="rc-action-btn rc-copy" title="Copy URL"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg></button>
+                <button class="rc-action-btn rc-view" title="Open link"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></button>
+              </div>
+            </div>
+            <div class="resource-card" data-url="https://docs.google.com/presentation/d/1VcF-BT7PYGcL4WURUsw9eG9ms-GO2IVn/edit">
+              <div class="rc-icon">📊</div>
+              <div class="rc-label">Workshop Slides</div>
+              <div class="rc-actions">
+                <button class="rc-action-btn rc-copy" title="Copy URL"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg></button>
+                <button class="rc-action-btn rc-view" title="Open link"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="resources-col-title">Tools & References</div>
+          <div class="resources-list">
+            <div class="resource-card" data-url="https://academy.postman.com/meet-agent-mode">
+              <div class="rc-icon">🤖</div>
+              <div class="rc-label">Meet Agent Mode</div>
+              <div class="rc-actions">
+                <button class="rc-action-btn rc-copy" title="Copy URL"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg></button>
+                <button class="rc-action-btn rc-view" title="Open link"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></button>
+              </div>
+            </div>
+            <div class="resource-card" data-url="https://postman.com/templates/agent-mode/">
+              <div class="rc-icon">💡</div>
+              <div class="rc-label">Prompt Library</div>
+              <div class="rc-actions">
+                <button class="rc-action-btn rc-copy" title="Copy URL"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg></button>
+                <button class="rc-action-btn rc-view" title="Open link"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></button>
+              </div>
+            </div>
+            <div class="resource-card" data-url="https://github.com/postmanlabs/postman-mcp-server">
+              <div class="rc-icon">🔌</div>
+              <div class="rc-label">Postman MCP Server</div>
+              <div class="rc-actions">
+                <button class="rc-action-btn rc-copy" title="Copy URL"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg></button>
+                <button class="rc-action-btn rc-view" title="Open link"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></button>
+              </div>
+            </div>
+            <div class="resource-card" data-url="https://github.com/Postman-Devrel/postman-claude-code-plugin">
+              <div class="rc-icon">🧩</div>
+              <div class="rc-label">Claude Code Plugin</div>
+              <div class="rc-actions">
+                <button class="rc-action-btn rc-copy" title="Copy URL"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg></button>
+                <button class="rc-action-btn rc-view" title="Open link"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></button>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -1134,14 +1355,12 @@ function renderGuideWorkshop() {
     </div>
 
     <!-- STEP 1 -->
-    <div class="step-card" id="step-1" data-step="1">
-      <div class="step-header" role="button" tabindex="0" aria-expanded="false" aria-controls="step-1-body">
+    <div class="step-section" id="section-1" data-step="1">
+      <div class="step-section-header">
         <div class="step-badge">1</div>
         <div class="step-title">Create a Blank Workspace</div>
-        <svg class="step-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
       </div>
-      <div class="step-body" id="step-1-body" role="region">
-        <div class="step-content">
+              <div class="step-content">
           <ol>
             <li>Sign in or sign up at <a href="https://postman.com" target="_blank" rel="noopener">postman.com</a>.</li>
             <li>Create a new <strong>Blank Workspace</strong>.</li>
@@ -1155,18 +1374,15 @@ function renderGuideWorkshop() {
             </label>
           </div>
         </div>
-      </div>
     </div>
 
     <!-- STEP 2 -->
-    <div class="step-card" id="step-2" data-step="2">
-      <div class="step-header" role="button" tabindex="0" aria-expanded="false" aria-controls="step-2-body">
+    <div class="step-section" id="section-2" data-step="2">
+      <div class="step-section-header">
         <div class="step-badge">2</div>
         <div class="step-title">Import the OpenAPI Spec</div>
-        <svg class="step-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
       </div>
-      <div class="step-body" id="step-2-body" role="region">
-        <div class="step-content">
+              <div class="step-content">
           <ol>
             <li>Click the <strong>+</strong> icon → <strong>Import</strong>.</li>
             <li>Paste this URL and click Import:</li>
@@ -1189,18 +1405,15 @@ function renderGuideWorkshop() {
             </label>
           </div>
         </div>
-      </div>
     </div>
 
     <!-- STEP 3 -->
-    <div class="step-card" id="step-3" data-step="3">
-      <div class="step-header" role="button" tabindex="0" aria-expanded="false" aria-controls="step-3-body">
+    <div class="step-section" id="section-3" data-step="3">
+      <div class="step-section-header">
         <div class="step-badge">3</div>
         <div class="step-title">Create the Environment with Agent Mode</div>
-        <svg class="step-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
       </div>
-      <div class="step-body" id="step-3-body" role="region">
-        <div class="step-content">
+              <div class="step-content">
           <ol>
             <li>Open <strong>Agent Mode</strong> (the AI chat panel in Postman).</li>
             <li>Use this prompt:</li>
@@ -1223,18 +1436,15 @@ function renderGuideWorkshop() {
             </label>
           </div>
         </div>
-      </div>
     </div>
 
     <!-- STEP 4 -->
-    <div class="step-card" id="step-4" data-step="4">
-      <div class="step-header" role="button" tabindex="0" aria-expanded="false" aria-controls="step-4-body">
+    <div class="step-section" id="section-4" data-step="4">
+      <div class="step-section-header">
         <div class="step-badge">4</div>
         <div class="step-title">Update the Environment Variable</div>
-        <svg class="step-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
       </div>
-      <div class="step-body" id="step-4-body" role="region">
-        <div class="step-content">
+              <div class="step-content">
           <ol>
             <li>Click on the <span class="inline-code">artemis.local</span> environment.</li>
             <li>Set <span class="inline-code">baseUrl</span> to:</li>
@@ -1262,9 +1472,7 @@ function renderGuideWorkshop() {
             </label>
           </div>
         </div>
-      </div>
     </div>
-
 
     <!-- ======================================================================
          PART 2: ARTEMIS MISSION CONTROL WORKFLOW
@@ -1274,14 +1482,12 @@ function renderGuideWorkshop() {
     </div>
 
     <!-- STEP 5 -->
-    <div class="step-card" id="step-5" data-step="5">
-      <div class="step-header" role="button" tabindex="0" aria-expanded="false" aria-controls="step-5-body">
+    <div class="step-section" id="section-5" data-step="5">
+      <div class="step-section-header">
         <div class="step-badge">5</div>
         <div class="step-title">Health Check & Registration</div>
-        <svg class="step-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
       </div>
-      <div class="step-body" id="step-5-body" role="region">
-        <div class="step-content">
+              <div class="step-content">
           <h3>5A — Verify the API is Running</h3>
           <ol>
             <li>Open the <strong>Health Check</strong> request in the collection.</li>
@@ -1337,18 +1543,15 @@ function renderGuideWorkshop() {
             </label>
           </div>
         </div>
-      </div>
     </div>
 
     <!-- STEP 6 -->
-    <div class="step-card" id="step-6" data-step="6">
-      <div class="step-header" role="button" tabindex="0" aria-expanded="false" aria-controls="step-6-body">
+    <div class="step-section" id="section-6" data-step="6">
+      <div class="step-section-header">
         <div class="step-badge">6</div>
         <div class="step-title">Auto-Save API Key with Agent Mode</div>
-        <svg class="step-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
       </div>
-      <div class="step-body" id="step-6-body" role="region">
-        <div class="step-content">
+              <div class="step-content">
           <ol>
             <li>Stay on the <strong>Register Crew Member</strong> request.</li>
             <li>Open a <strong>new chat</strong> in Agent Mode.</li>
@@ -1398,18 +1601,15 @@ function renderGuideWorkshop() {
             </label>
           </div>
         </div>
-      </div>
     </div>
 
     <!-- STEP 7 -->
-    <div class="step-card" id="step-7" data-step="7">
-      <div class="step-header" role="button" tabindex="0" aria-expanded="false" aria-controls="step-7-body">
+    <div class="step-section" id="section-7" data-step="7">
+      <div class="step-section-header">
         <div class="step-badge">7</div>
         <div class="step-title">Build a Mission Dashboard</div>
-        <svg class="step-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
       </div>
-      <div class="step-body" id="step-7-body" role="region">
-        <div class="step-content">
+              <div class="step-content">
           <ol>
             <li>Stay on <strong>Get Mission Overview</strong>.</li>
             <li>Open Agent Mode, drag the request into the chat.</li>
@@ -1441,18 +1641,15 @@ function renderGuideWorkshop() {
             </label>
           </div>
         </div>
-      </div>
     </div>
 
     <!-- STEP 5 (PARTICIPANT) — Docs + Logs Split-Flow -->
-    <div class="step-card" id="step-8" data-step="8">
-      <div class="step-header" role="button" tabindex="0" aria-expanded="false" aria-controls="step-8-body">
+    <div class="step-section" id="section-8" data-step="8">
+      <div class="step-section-header">
         <div class="step-badge">5</div>
         <div class="step-title">Documentation + Mission Log Blitz</div>
-        <svg class="step-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
       </div>
-      <div class="step-body" id="step-8-body" role="region">
-        <div class="step-content">
+              <div class="step-content">
           <div class="alert alert-info" style="margin-top:16px;">
             <span class="alert-emoji">📋</span>
             <strong>How this step works:</strong> Start documentation generation first — it runs in the background while you create your 3 mission logs.
@@ -1635,18 +1832,15 @@ function renderGuideWorkshop() {
             </label>
           </div>
         </div>
-      </div>
     </div>
 
     <!-- STEP 6 (PARTICIPANT) — Complete Your Mission -->
-    <div class="step-card" id="step-9" data-step="9">
-      <div class="step-header" role="button" tabindex="0" aria-expanded="false" aria-controls="step-9-body">
+    <div class="step-section" id="section-9" data-step="9">
+      <div class="step-section-header">
         <div class="step-badge">6</div>
         <div class="step-title">Complete Your Mission — Update, Brief, Splashdown</div>
-        <svg class="step-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
       </div>
-      <div class="step-body" id="step-9-body" role="region">
-        <div class="step-content">
+              <div class="step-content">
           <p style="margin-top:16px;">You've created 3 logs. Now finish the remaining mission requirements.</p>
 
           <table class="mission-tracker">
@@ -1758,18 +1952,15 @@ function renderGuideWorkshop() {
             </label>
           </div>
         </div>
-      </div>
     </div>
 
     <!-- STEP 7 (PARTICIPANT) — Integration Tests -->
-    <div class="step-card" id="step-10" data-step="10">
-      <div class="step-header" role="button" tabindex="0" aria-expanded="false" aria-controls="step-10-body">
+    <div class="step-section" id="section-10" data-step="10">
+      <div class="step-section-header">
         <div class="step-badge">7</div>
         <div class="step-title">Generate an Integration Test Suite</div>
-        <svg class="step-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
       </div>
-      <div class="step-body" id="step-10-body" role="region">
-        <div class="step-content">
+              <div class="step-content">
           <ol>
             <li>Start a <strong>new chat</strong> in Agent Mode.</li>
             <li>Drag and drop your collection into the chat.</li>
@@ -1840,18 +2031,15 @@ Do not write tests yet — we will add them subsequently.</pre>
             </label>
           </div>
         </div>
-      </div>
     </div>
 
     <!-- STEP 8 (PARTICIPANT) — MCP -->
-    <div class="step-card" id="step-11" data-step="11">
-      <div class="step-header" role="button" tabindex="0" aria-expanded="false" aria-controls="step-11-body">
+    <div class="step-section" id="section-11" data-step="11">
+      <div class="step-section-header">
         <div class="step-badge">8</div>
         <div class="step-title">MCP — Connect an AI Agent to Your API</div>
-        <svg class="step-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
       </div>
-      <div class="step-body" id="step-11-body" role="region">
-        <div class="step-content">
+              <div class="step-content">
           <div class="alert alert-info" style="margin-top:16px;">
             <span class="alert-emoji">🔌</span>
             <strong>What is MCP?</strong> MCP (Model Context Protocol) turns your Postman collection into <strong>tools</strong> that an AI agent (like Claude) can call. The agent reads the collection, understands the endpoints, and calls them based on natural language.
@@ -1900,8 +2088,6 @@ and tell me status of all participants progress.</pre>
               <span class="check-label">Claude successfully called an API endpoint via MCP</span>
             </label>
           </div>
-        </div>
-      </div>
     </div>
 
     <!-- ============== RESET ============== -->
@@ -1914,7 +2100,8 @@ and tell me status of all participants progress.</pre>
       <p style="margin-top: 12px;">ARTEMIS WORKSHOP · APR 2026 · POSTMAN API</p>
       <p style="margin-top: 8px;"><a href="https://www.linkedin.com/in/mishra-aanchal/" target="_blank" rel="noopener" style="color: var(--accent-blue); text-decoration: none; border-bottom: 1px solid rgba(0, 212, 255, 0.3);">Made by Aanchal Mishra</a></p>
     </div>
-  </div>
+    </main><!-- /content-area -->
+  </div><!-- /docs-layout -->
 
   <!-- ============== CELEBRATION OVERLAY ============== -->
   <canvas id="confetti-canvas"></canvas>
@@ -2003,6 +2190,7 @@ and tell me status of all participants progress.</pre>
         applyState();
         updateProgress();
         updateStepStates();
+        updateSidebarStates();
         updateDocsIndicator();
         updateLogProgress();
         checkCompletion();
@@ -2055,7 +2243,7 @@ and tell me status of all participants progress.</pre>
       }
 
       function updateStepStates() {
-        const cards = document.querySelectorAll('.step-card');
+        const cards = document.querySelectorAll('.step-section');
         let firstIncomplete = null;
 
         cards.forEach(card => {
@@ -2075,52 +2263,83 @@ and tell me status of all participants progress.</pre>
             firstIncomplete = card;
           }
         });
+      }
 
-        // Auto-expand first incomplete if nothing is open
-        const anyOpen = document.querySelector('.step-card.open');
-        if (!anyOpen && firstIncomplete) {
-          openStep(firstIncomplete);
+      // ── Scroll-Spy & Sidebar ────────────
+      let currentActiveNav = null;
+
+      function updateActiveNav(stepNum) {
+        if (currentActiveNav) currentActiveNav.classList.remove('active');
+        const link = document.querySelector('.nav-link[data-nav="' + stepNum + '"]');
+        if (link) {
+          link.classList.add('active');
+          currentActiveNav = link;
+          // Keep active link visible in sidebar
+          link.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
         }
       }
 
-      // ── Collapsible Cards ─────────────────
-      function openStep(card) {
-        card.classList.add('open', 'active');
-        const header = card.querySelector('.step-header');
-        if (header) header.setAttribute('aria-expanded', 'true');
+      function initScrollSpy() {
+        const sections = document.querySelectorAll('.step-section');
+        const io = new IntersectionObserver(entries => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              updateActiveNav(entry.target.dataset.step);
+            }
+          });
+        }, { rootMargin: '-80px 0px -60% 0px', threshold: 0 });
+        sections.forEach(s => io.observe(s));
       }
 
-      function closeStep(card) {
-        card.classList.remove('open', 'active');
-        const header = card.querySelector('.step-header');
-        if (header) header.setAttribute('aria-expanded', 'false');
-      }
+      function initSidebar() {
+        const sidebar = document.getElementById('sidebar');
+        const toggle = document.getElementById('sidebarToggle');
+        const overlay = document.getElementById('sidebarOverlay');
 
-      function toggleStep(card) {
-        if (card.classList.contains('open')) {
-          closeStep(card);
-        } else {
-          openStep(card);
+        // Nav link clicks
+        document.querySelectorAll('.nav-link').forEach(link => {
+          link.addEventListener('click', e => {
+            e.preventDefault();
+            const target = document.querySelector(link.getAttribute('href'));
+            if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            // Close mobile sidebar
+            if (sidebar) sidebar.classList.remove('open');
+            if (overlay) overlay.classList.remove('show');
+          });
+        });
+
+        // Mobile toggle
+        if (toggle && sidebar && overlay) {
+          toggle.addEventListener('click', () => {
+            sidebar.classList.toggle('open');
+            overlay.classList.toggle('show');
+          });
+          overlay.addEventListener('click', () => {
+            sidebar.classList.remove('open');
+            overlay.classList.remove('show');
+          });
         }
       }
 
-      function autoAdvance(currentCard) {
-        const stepNum = parseInt(currentCard.dataset.step);
+      function updateSidebarStates() {
+        document.querySelectorAll('.nav-link').forEach(link => {
+          const stepNum = parseInt(link.dataset.nav);
+          if (isInternalStepComplete(stepNum)) {
+            link.classList.add('completed');
+          } else {
+            link.classList.remove('completed');
+          }
+        });
+      }
+
+      function autoAdvance(currentSection) {
+        const stepNum = parseInt(currentSection.dataset.step);
         if (!isInternalStepComplete(stepNum)) return;
-
-        // Find the next step card
-        const allCards = Array.from(document.querySelectorAll('.step-card'));
-        const idx = allCards.indexOf(currentCard);
-        if (idx < 0 || idx >= allCards.length - 1) return;
-
-        const nextCard = allCards[idx + 1];
-        const nextStep = parseInt(nextCard.dataset.step);
-        if (!isInternalStepComplete(nextStep)) {
-          // Close current, open next
-          closeStep(currentCard);
-          openStep(nextCard);
-          nextCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
+        const allSections = Array.from(document.querySelectorAll('.step-section'));
+        const idx = allSections.indexOf(currentSection);
+        if (idx < 0 || idx >= allSections.length - 1) return;
+        const next = allSections[idx + 1];
+        next.scrollIntoView({ behavior: 'smooth', block: 'start' });
       }
 
       // ── Docs Indicator (Step 8 special) ───
@@ -2267,18 +2486,8 @@ and tell me status of all participants progress.</pre>
         updateDocsIndicator();
         updateLogProgress();
 
-        // Reset badges back to numbers
-        document.querySelectorAll('.step-card').forEach(card => {
-          const badge = card.querySelector('.step-badge');
-          const pStep = INTERNAL_TO_PARTICIPANT[card.dataset.step];
-          if (badge) badge.textContent = pStep;
-          card.classList.remove('completed');
-        });
-
-        // Close all, open step 1
-        document.querySelectorAll('.step-card').forEach(card => closeStep(card));
-        const first = document.getElementById('step-1');
-        if (first) openStep(first);
+        // Update sidebar states
+        updateSidebarStates();
 
         window.scrollTo({ top: 0, behavior: 'smooth' });
       }
@@ -2304,7 +2513,7 @@ and tell me status of all participants progress.</pre>
             onCheckChange(checkId, isNowChecked);
 
             // Auto-advance if step is complete
-            const card = item.closest('.step-card');
+            const card = item.closest('.step-section');
             if (card && isNowChecked) {
               setTimeout(() => autoAdvance(card), 500);
             }
@@ -2318,18 +2527,6 @@ and tell me status of all participants progress.</pre>
           });
         });
 
-        // Wire up step headers
-        document.querySelectorAll('.step-header').forEach(header => {
-          header.addEventListener('click', () => {
-            toggleStep(header.closest('.step-card'));
-          });
-          header.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter' || e.key === ' ') {
-              e.preventDefault();
-              toggleStep(header.closest('.step-card'));
-            }
-          });
-        });
 
         // Wire up copy buttons
         document.querySelectorAll('.copy-btn').forEach(btn => {
@@ -2339,16 +2536,26 @@ and tell me status of all participants progress.</pre>
           });
         });
 
-        // Wire up resources toggle
-        const resToggle = document.getElementById('resourcesToggle');
-        const resPanel = document.getElementById('resourcesPanel');
-        if (resToggle && resPanel) {
-          resToggle.addEventListener('click', () => {
-            const isOpen = resPanel.classList.toggle('open');
-            resToggle.classList.toggle('open', isOpen);
-            resToggle.setAttribute('aria-expanded', isOpen);
-          });
-        }
+
+        // Wire up resource card actions
+        document.querySelectorAll('.resource-card[data-url]').forEach(card => {
+          const url = card.dataset.url;
+          const copyBtn = card.querySelector('.rc-copy');
+          const viewBtn = card.querySelector('.rc-view');
+          if (copyBtn) {
+            copyBtn.addEventListener('click', () => {
+              navigator.clipboard.writeText(url).then(() => {
+                copyBtn.classList.add('copied');
+                setTimeout(() => copyBtn.classList.remove('copied'), 1500);
+              });
+            });
+          }
+          if (viewBtn) {
+            viewBtn.addEventListener('click', () => {
+              window.open(url, '_blank', 'noopener');
+            });
+          }
+        });
 
         // Wire up reset
         const resetBtn = document.getElementById('resetBtn');
@@ -2359,13 +2566,10 @@ and tell me status of all participants progress.</pre>
         // Wire up theme toggle
         const THEME_KEY = 'artemis-theme';
         const themeToggle = document.getElementById('themeToggle');
-        
-        // Restore saved theme
         const savedTheme = localStorage.getItem(THEME_KEY);
         if (savedTheme) {
           document.documentElement.setAttribute('data-theme', savedTheme);
         }
-
         if (themeToggle) {
           themeToggle.addEventListener('click', () => {
             const current = document.documentElement.getAttribute('data-theme');
@@ -2385,20 +2589,10 @@ and tell me status of all participants progress.</pre>
         updateDocsIndicator();
         updateLogProgress();
 
-        // Open first incomplete step
-        const cards = Array.from(document.querySelectorAll('.step-card'));
-        let opened = false;
-        for (const card of cards) {
-          const stepNum = parseInt(card.dataset.step);
-          if (!isInternalStepComplete(stepNum)) {
-            openStep(card);
-            opened = true;
-            break;
-          }
-        }
-        if (!opened && cards.length > 0) {
-          openStep(cards[0]);
-        }
+        // Init sidebar navigation & scroll-spy
+        initSidebar();
+        initScrollSpy();
+        updateSidebarStates();
       }
 
       // Start when DOM is ready
