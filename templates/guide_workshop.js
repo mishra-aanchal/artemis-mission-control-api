@@ -1296,7 +1296,7 @@ function renderGuideWorkshop() {
                 <button class="rc-action-btn rc-view" title="Open link"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></button>
               </div>
             </div>
-            <div class="resource-card" data-url="https://docs.google.com/presentation/d/1VcF-BT7PYGcL4WURUsw9eG9ms-GO2IVn/edit">
+            <div class="resource-card" data-url="https://docs.google.com/presentation/d/11BX6kzboG3SGSNEzSRnrZC3WRDEMU1s2/edit?usp=sharing&ouid=107804457137932596927&rtpof=true&sd=true">
               <div class="rc-icon">📊</div>
               <div class="rc-label">Workshop Slides</div>
               <div class="rc-actions">
